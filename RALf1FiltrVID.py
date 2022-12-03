@@ -118,6 +118,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=1):
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
                    
         aaa=np.fft.ifft(farxxx).real
+        aaa=(-2*((key<0)-.5)*aaa[0:int(len(aaa)/2)]+aaa[int(len(aaa)/2):])/2
         arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=aaa[::-1].copy()[0:Nnl]
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
@@ -163,6 +164,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
     hh_=0      
     Nzz0=Nzz
     Atim_0=tm.time()  
+    dd1_x=[]
       
     while hh<Nhh:  
         if hh==0:  
@@ -429,34 +431,30 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     
                 ann=1  
                 try:
-                    dd1=(filterFourierQ(AMX[hh],rrr,NNew,NChan))
-                    dd2=(filterFourierQ(AMN[hh],rrr,NNew,NChan)) 
-                    dd1=(dd1+dd2)/2
-                    dd2=dd1.copy()
+                    dd1=(filterFourierQ(AMX[hh],rrr,NNew,NChan,-1))
+                    dd2=(filterFourierQ(AMN[hh],rrr,NNew,NChan,-1)) 
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
-                        sr2_1=[]
-                        sr2_2=[]
+                        dd1_x.append((dd1+dd2)/2)
+                        dd1=np.mean(dd1_x,axis=0)
+                        dd2=dd1.copy()
+                        sr2=[]
                         sarr_c=[]
                         for l in range(NChan):  
-                            sr2_1.append((dd1)[Nf-NNew+Nf*l:Nf-NNew0+Nf*l])
-                            sr2_2.append((dd2)[Nf-NNew+Nf*l:Nf-NNew0+Nf*l])
+                            sr2.append((dd1)[Nf-NNew+Nf*l:Nf-NNew0+Nf*l])
                             sarr_c.append(arr_c[(NNew-NNew0)*l:NNew-NNew0+(NNew-NNew0)*l].copy())
-                        sr2_1=np.asarray(sr2_1,float)
-                        sr2_2=np.asarray(sr2_2,float)
+                        sr2=np.asarray(sr2,float)
                         sarr_c=np.asarray(sarr_c,float) 
-                        sr2_1=sr2_1.reshape((len(sr2_1)*len(sr2_1[0])))
-                        sr2_2=sr2_2.reshape((len(sr2_2)*len(sr2_2[0])))
+                        sr2=sr2.reshape((len(sr2)*len(sr2[0])))
                         sarr_c=sarr_c.reshape((len(sarr_c)*len(sarr_c[0])))   
-                        P_1=P.copy()
-                        P_2=P.copy()                        
-                        P_1[0:2]=np.polyfit(sarr_c,sr2_1,1)
-                        P_2[0:2]=np.polyfit(sarr_c,sr2_2,1)
-                        # P[0]=np.std(sr2)/np.std(sarr_c)
-                        # P[1]=np.mean(sr2)-P[0]*np.mean(sarr_c)                        
-                        if 100*scp.pearsonr(sarr_c,P_1[0]*sr2_1+P_2[0]*sr2_2)[0]>10 and P_1[0]>0 and P_2[0]>0:
+                    
+                        #P[0:2]=np.polyfit(sarr_c,sr2,1)
+                        
+                        P[0]=np.std(sr2)/np.std(sarr_c)
+                        P[1]=np.mean(sr2)-P[0]*np.mean(sarr_c)                        
+                        if P[0]>0:
                             for l in range(NChan):  
-                                dd1[Nf-NNew+Nf*l:Nf+Nf*l]=(dd1[Nf-NNew+Nf*l:Nf+Nf*l]-P_1[1])/P_1[0]
-                                dd2[Nf-NNew+Nf*l:Nf+Nf*l]=(dd2[Nf-NNew+Nf*l:Nf+Nf*l]-P_2[1])/P_2[0]
+                                dd1[Nf-NNew+Nf*l:Nf+Nf*l]=(dd1[Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
+                                dd2[Nf-NNew+Nf*l:Nf+Nf*l]=(dd2[Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
                             max_dd1[hh]=rr2[hh].copy()
                             min_dd2[hh]=rr2[hh].copy()
                             for l in range(NChan):
@@ -472,7 +470,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             hh=hh+1
                             ann=0         
                             rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
-                            rr2[hh]=filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan) 
+                            rr2[hh]=filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,-1) 
                             sr2=[]
                             sarr_c=[]
                             for l in range(NChan):  
@@ -485,39 +483,44 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             
                             P[0:2]=np.polyfit(sarr_c,sr2,1)  
                             
-                            for l in range(NChan):  
-                                rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
-                                rr2[hh,Nf*l:Nf-NNew+Nf*l]=arr_b[Nf*l:Nf-NNew+Nf*l].copy()
-                            #P[0:2]=np.polyfit(sarr_c,sr2,1)   
-
-                            #D1=0.2
-                            if hh==Nhh:
-                                # sr2=[]
-                                # sarr_c=[]
-                                # for l in range(NChan):  
-                                #     sr2.append(rr2[hh,Nf-NNew+Nf*l:Nf-NNew0+Nf*l].copy())
-                                #     sarr_c.append(arr_c[(NNew-NNew0)*l:NNew-NNew0+(NNew-NNew0)*l].copy())
-                                # sr2=np.asarray(sr2,float)
-                                # sarr_c=np.asarray(sarr_c,float) 
-                                # sr2=sr2.reshape((len(sr2)*len(sr2[0])))
-                                # sarr_c=sarr_c.reshape((len(sarr_c)*len(sarr_c[0]))) 
-                                # P[0]=np.std(sr2)/np.std(sarr_c)
-                                # P[1]=np.mean(sr2)-P[0]*np.mean(sarr_c)
-                                if abs(P[0]-1.)<0.5 and sum(abs(rr2[hh])==np.Inf)==0 and D1<1: 
-                                    anamef="fralf.tmp"
-                                    fo = open(anamef, "w")
-                                    Atim_1=tm.time()   
-                                    fo.write(str(iProc)+' it=%d, K=%3.2f Tm=%5.2f\n'%(hh,D1,Atim_1-Atim_0))
-                                    fo.close()
-                                    return np.asarray(rr2[hh],float)
-                                else:
-                                    hh=hh0
+                            if P[0]>0:  
+                                #100*scp.pearsonr(sarr_c,sr2)[0]>10 and
+                                dd1_x=[]                                
+                                for l in range(NChan):  
+                                    rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
+                                    rr2[hh,Nf*l:Nf-NNew+Nf*l]=arr_b[Nf*l:Nf-NNew+Nf*l].copy()
+                                #P[0:2]=np.polyfit(sarr_c,sr2,1)   
+    
+                                #D1=0.2
+                                if hh==Nhh:
+                                    # sr2=[]
+                                    # sarr_c=[]
+                                    # for l in range(NChan):  
+                                    #     sr2.append(rr2[hh,Nf-NNew+Nf*l:Nf-NNew0+Nf*l].copy())
+                                    #     sarr_c.append(arr_c[(NNew-NNew0)*l:NNew-NNew0+(NNew-NNew0)*l].copy())
+                                    # sr2=np.asarray(sr2,float)
+                                    # sarr_c=np.asarray(sarr_c,float) 
+                                    # sr2=sr2.reshape((len(sr2)*len(sr2[0])))
+                                    # sarr_c=sarr_c.reshape((len(sarr_c)*len(sarr_c[0]))) 
+                                    # P[0]=np.std(sr2)/np.std(sarr_c)
+                                    # P[1]=np.mean(sr2)-P[0]*np.mean(sarr_c)
+                                    if abs(P[0]-1.)<0.5 and sum(abs(rr2[hh])==np.Inf)==0 and D1<1: 
+                                        anamef="fralf.tmp"
+                                        fo = open(anamef, "w")
+                                        Atim_1=tm.time()   
+                                        fo.write(str(iProc)+' it=%d, K=%3.2f Tm=%5.2f\n'%(hh,D1,Atim_1-Atim_0))
+                                        fo.close()
+                                        return np.asarray(rr2[hh],float)
+                                    else:
+                                        hh=hh0
+                            else:                                
+                                hh=hh0
                         else:
                             hh=hh0
                 except:
                     hh=hh0
 
-        if hh0==hh:
+        if hh0==hh:            
             hh_=hh_+1
             if hh>1:
                 hh=hh-2
