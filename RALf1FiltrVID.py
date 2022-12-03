@@ -165,7 +165,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
     Nzz0=Nzz
     Atim_0=tm.time()  
     dd1_x=[]
-      
+    dd2_x=[]  
     while hh<Nhh:  
         if hh==0:  
             AMX=np.zeros((Nhh,sz),float)
@@ -434,27 +434,36 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     dd1=(filterFourierQ(AMX[hh],rrr,NNew,NChan,-1))
                     dd2=(filterFourierQ(AMN[hh],rrr,NNew,NChan,-1)) 
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
-                        dd1_x.append((dd1+dd2)/2)
+                        dd1_x.append(dd1)
+                        dd2_x.append(dd2)
                         dd1=np.mean(dd1_x,axis=0)
-                        dd2=dd1.copy()
-                        sr2=[]
+                        dd2=np.mean(dd2_x,axis=0)
+                        sr2_1=[]
+                        sr2_2=[]
                         sarr_c=[]
                         for l in range(NChan):  
-                            sr2.append((dd1)[Nf-NNew+Nf*l:Nf-NNew0+Nf*l])
+                            sr2_1.append((dd1)[Nf-NNew+Nf*l:Nf-NNew0+Nf*l])
+                            sr2_2.append((dd2)[Nf-NNew+Nf*l:Nf-NNew0+Nf*l])
                             sarr_c.append(arr_c[(NNew-NNew0)*l:NNew-NNew0+(NNew-NNew0)*l].copy())
-                        sr2=np.asarray(sr2,float)
+                        sr2_1=np.asarray(sr2_1,float)
+                        sr2_2=np.asarray(sr2_2,float)
                         sarr_c=np.asarray(sarr_c,float) 
-                        sr2=sr2.reshape((len(sr2)*len(sr2[0])))
+                        sr2_1=sr2_1.reshape((len(sr2_1)*len(sr2_1[0])))
+                        sr2_2=sr2_2.reshape((len(sr2_2)*len(sr2_2[0])))
                         sarr_c=sarr_c.reshape((len(sarr_c)*len(sarr_c[0])))   
                     
                         #P[0:2]=np.polyfit(sarr_c,sr2,1)
+                        P_1=P.copy()
+                        P_2=P.copy()
                         
-                        P[0]=np.std(sr2)/np.std(sarr_c)
-                        P[1]=np.mean(sr2)-P[0]*np.mean(sarr_c)                        
+                        P_1[0]=np.std(sr2_1)/np.std(sarr_c)
+                        P_1[1]=np.mean(sr2_1)-P_1[0]*np.mean(sarr_c) 
+                        P_2[0]=np.std(sr2_2)/np.std(sarr_c)
+                        P_2[1]=np.mean(sr2_2)-P_2[0]*np.mean(sarr_c)  
                         if P[0]>0:
                             for l in range(NChan):  
-                                dd1[Nf-NNew+Nf*l:Nf+Nf*l]=(dd1[Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
-                                dd2[Nf-NNew+Nf*l:Nf+Nf*l]=(dd2[Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
+                                dd1[Nf-NNew+Nf*l:Nf+Nf*l]=(dd1[Nf-NNew+Nf*l:Nf+Nf*l]-P_1[1])/P_1[0]
+                                dd2[Nf-NNew+Nf*l:Nf+Nf*l]=(dd2[Nf-NNew+Nf*l:Nf+Nf*l]-P_2[1])/P_2[0]
                             max_dd1[hh]=rr2[hh].copy()
                             min_dd2[hh]=rr2[hh].copy()
                             for l in range(NChan):
@@ -485,7 +494,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             
                             if P[0]>0:  
                                 #100*scp.pearsonr(sarr_c,sr2)[0]>10 and
-                                dd1_x=[]                                
+                                dd1_x=[]     
+                                dd2_x=[]  
                                 for l in range(NChan):  
                                     rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
                                     rr2[hh,Nf*l:Nf-NNew+Nf*l]=arr_b[Nf*l:Nf-NNew+Nf*l].copy()
