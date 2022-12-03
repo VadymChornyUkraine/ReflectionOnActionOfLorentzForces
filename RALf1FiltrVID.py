@@ -72,7 +72,7 @@ def RandomQ(Nfx,NQRandm_=0):
     liiXX=np.asarray(rr2[1],int)
     return liiXX
 
-def filterFourierQ(arxx,arb,NNew,NChan,key=-1):  
+def filterFourierQ(arxx,arb,NNew,NChan,key=1):  
     Nfl=int(len(arb)/NChan)
     Nfl_=int(len(arxx)/NChan)
     Nnl=NNew    
@@ -97,6 +97,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
     for l in range(NChan):      
         ar_=arxx[Nfl_*(l+1)-Nnl:Nfl_*(l+1)].copy()
         ar_=ar_-ar_[0]
+        ar_=ar_[::-1].copy()
         farxx=np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_)))    
         mfarxx=np.abs(farxx)+1e-32  
         farxxx=np.zeros(2*Nnl,complex)    
@@ -108,7 +109,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
                 farxxx[j]=(farxx[j]/mfarxx[j])*np.sqrt(farx[j]*mfarxx[j]) 
                 #farxxx[j]=(farxx[j]/mfarxx[j])*farx[j]
                        
-        farxxx[0]=0*farxx[0]
+        farxxx[0]=0*farxx[0]   
         if not key<0:
             farxxx[1]=farxxx[1]*0
             farxxx[2*Nnl-1]=farxxx[2*Nnl-1]*0 
@@ -117,7 +118,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
                    
         aaa=np.fft.ifft(farxxx).real
-        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=aaa[0:Nnl].copy()
+        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=aaa[::-1].copy()[0:Nnl]
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
     gg=gg/NChan   
@@ -471,7 +472,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             hh=hh+1
                             ann=0         
                             rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
-                            rr2[hh]=filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,1) 
+                            rr2[hh]=filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan) 
                             sr2=[]
                             sarr_c=[]
                             for l in range(NChan):  

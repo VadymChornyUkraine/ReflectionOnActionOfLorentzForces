@@ -1,8 +1,6 @@
 import hickle as hkl
 import numpy as np
 
-aaaa=hkl.load("ralfrez.rlf1")
-
 dNIt=8
 Ngroup=3
 Nproc=2*Ngroup#*(os.cpu_count())
