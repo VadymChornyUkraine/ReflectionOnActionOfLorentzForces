@@ -431,13 +431,13 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     
                 ann=1  
                 try:
-                    dd1=(filterFourierQ(AMX[hh],rrr,NNew,NChan,-1))
-                    dd2=(filterFourierQ(AMN[hh],rrr,NNew,NChan,-1)) 
+                    dd1=(filterFourierQ(AMX[hh],rrr,NNew,NChan))
+                    dd2=(filterFourierQ(AMN[hh],rrr,NNew,NChan)) 
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
                         dd1_x.append(dd1)
                         dd2_x.append(dd2)
-                        dd1=np.mean(dd1_x,axis=0)
-                        dd2=np.mean(dd2_x,axis=0)
+                        dd1=np.amax(dd1_x,axis=0)
+                        dd2=np.amin(dd2_x,axis=0)
                         sr2_1=[]
                         sr2_2=[]
                         sarr_c=[]
@@ -452,15 +452,18 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                         sr2_2=sr2_2.reshape((len(sr2_2)*len(sr2_2[0])))
                         sarr_c=sarr_c.reshape((len(sarr_c)*len(sarr_c[0])))   
                     
-                        #P[0:2]=np.polyfit(sarr_c,sr2,1)
                         P_1=P.copy()
                         P_2=P.copy()
+                        # P_1[0:2]=np.polyfit(sarr_c,sr2_1,1)
+                        # P_2[0:2]=np.polyfit(sarr_c,sr2_2,1)
                         
                         P_1[0]=np.std(sr2_1)/np.std(sarr_c)
                         P_1[1]=np.mean(sr2_1)-P_1[0]*np.mean(sarr_c) 
                         P_2[0]=np.std(sr2_2)/np.std(sarr_c)
                         P_2[1]=np.mean(sr2_2)-P_2[0]*np.mean(sarr_c)  
-                        if P[0]>0:
+                        if P_1[0]>0 and P_2[0]>0:
+                        # if 100*scp.pearsonr(sarr_c,((sr2_1-P_1[1])/P_1[0]+
+                        #     (sr2_2-P_2[1])/P_2[0]))>10:                        
                             for l in range(NChan):  
                                 dd1[Nf-NNew+Nf*l:Nf+Nf*l]=(dd1[Nf-NNew+Nf*l:Nf+Nf*l]-P_1[1])/P_1[0]
                                 dd2[Nf-NNew+Nf*l:Nf+Nf*l]=(dd2[Nf-NNew+Nf*l:Nf+Nf*l]-P_2[1])/P_2[0]
@@ -479,7 +482,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             hh=hh+1
                             ann=0         
                             rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
-                            rr2[hh]=filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,-1) 
+                            rr2[hh]=filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan) 
                             sr2=[]
                             sarr_c=[]
                             for l in range(NChan):  
