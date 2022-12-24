@@ -22,9 +22,9 @@ from RALf1FiltrVID import RALf1FiltrQ
 from RALf1FiltrVID import RandomQ
 import RALF1FilterX as XFilter  
 
-MxTime=1*60*60 # 2 haurs
+MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX2/"
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX3/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -128,8 +128,8 @@ def loaddata(aLengt,ticker1,key):
                 if i>0:
                     dat.append(row[2])
                 i=i+1
-        dat=dat[len(dat)-aLengt:]
-        dat=dat[:len(dat)-2*aDecm]
+        dat=dat[len(dat)-aLengt+2*aDecm:]
+        dat=dat[:len(dat)]
         try:
             dat=np.asarray(dat,float)
             arrr=np.asarray(dat,float)
@@ -501,10 +501,10 @@ if __name__ == '__main__':
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=1.5*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=3*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=1.5*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                    ar0x_=3*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
                 for i in range(anI):    
                     if Lo:                                
@@ -513,11 +513,11 @@ if __name__ == '__main__':
                         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=1.5*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=3*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                     ZDat=np.exp(ZDat)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=1.5*(np.median(abs((ZDat)-(ar0x)),axis=0))        
+                    ar0x_=3*(np.median(abs((ZDat)-(ar0x)),axis=0))        
                 
                 ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
