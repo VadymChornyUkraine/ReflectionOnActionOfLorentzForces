@@ -72,7 +72,7 @@ def RandomQ(Nfx,NQRandm_=0):
     liiXX=np.asarray(rr2[1],int)
     return liiXX
 
-def filterFourierQ(arxx,arb,NNew,NChan,key=1):  
+def filterFourierQ(arxx,arb,NNew,NChan,key=-1):  
     Nfl=int(len(arb)/NChan)
     Nfl_=int(len(arxx)/NChan)
     Nnl=NNew    
@@ -110,9 +110,9 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=1):
                 #farxxx[j]=(farxx[j]/mfarxx[j])*farx[j]
                        
         farxxx[0]=0*farxx[0]   
-        if not key<0:
-            farxxx[1]=farxxx[1]*0
-            farxxx[2*Nnl-1]=farxxx[2*Nnl-1]*0 
+        #if not key<0:
+        farxxx[1]=farxxx[1]*0
+        farxxx[2*Nnl-1]=farxxx[2*Nnl-1]*0 
         # if key<0:
         #     farxxx[2]=farxxx[2]*0
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
