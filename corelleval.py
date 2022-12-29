@@ -493,11 +493,11 @@ if __name__ == '__main__':
                 ZDat=xxxx.copy()        
                 
                 anI=len(ZDat)
-                for i in range(anI):  
-                    if Lo:
-                        ZDat[i][:len(ar0)]=np.log(ar0)
-                    else:
-                        ZDat[i][:len(ar0)]=ar0.copy()
+                # for i in range(anI):  
+                #     if Lo:
+                #         ZDat[i][:len(ar0)]=np.log(ar0)
+                #     else:
+                #         ZDat[i][:len(ar0)]=ar0.copy()
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
@@ -519,7 +519,7 @@ if __name__ == '__main__':
                     ar0x=np.median(ZDat,axis=0)
                     ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
                 
-                ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
+                #ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
                 # if not sum(abs(arr_rezBzz))==0:
                 #     ar0x=arr_rezBzz.copy()
