@@ -87,7 +87,8 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         for i in range(az):
             ar_=arb[Nfl-(az-i)*Nnl+Nfl*l:Nfl+Nnl-(az-i)*Nnl+Nfl*l].copy()
             gg0=gg0+np.sum(ar_*ar_)
-            ar_=ar_-ar_[len(ar_)-1]
+            #ar_=ar_-ar_[len(ar_)-1]
+            ar_=ar_-np.mean(ar_)
             ar__=abs(np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_)))) 
             farx=np.maximum(farx,ar__)
     gg0=np.sqrt(gg0)/(NChan*az*Nnl)
@@ -96,7 +97,8 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
     arxr=arxx.copy()
     for l in range(NChan):      
         ar_=arxx[Nfl_*(l+1)-Nnl:Nfl_*(l+1)].copy()
-        ar_=ar_-ar_[0]
+        #ar_=ar_-ar_[0]
+        ar_=ar_-np.mean(ar_)
         ar_=ar_[::-1].copy()
         farxx=np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_)))    
         mfarxx=np.abs(farxx)+1e-32  
@@ -111,8 +113,8 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
                        
         farxxx[0]=0*farxx[0]   
         #if not key<0:
-        farxxx[1]=farxxx[1]*0
-        farxxx[2*Nnl-1]=farxxx[2*Nnl-1]*0 
+        # farxxx[1]=farxxx[1]*0
+        # farxxx[2*Nnl-1]=farxxx[2*Nnl-1]*0 
         # if key<0:
         #     farxxx[2]=farxxx[2]*0
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
