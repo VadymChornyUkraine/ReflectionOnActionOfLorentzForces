@@ -22,7 +22,7 @@ from RALf1FiltrVID import RALf1FiltrQ
 from RALf1FiltrVID import RandomQ
 import RALF1FilterX as XFilter  
 
-MxTime=0.5*60*60 # 2 haurs
+MxTime=1*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
 wrkdir = r"/home/vacho/Документи/Work/W14_7/WX4/"
 api_key = 'ONKTYPV6TAMZK464' 
@@ -557,8 +557,8 @@ if __name__ == '__main__':
                         ZDat=xxxx.copy()
                         hhhx=0
                         anI=len(ZDat)
-                        for i in range(anI):  
-                            ZDat[i][:len(ar0)]=ar0.copy()
+                        # for i in range(anI):  
+                        #     ZDat[i][:len(ar0)]=ar0.copy()
                         for i in range(anI):
                             if Lo:                                
                                 ZDat[i]=np.exp(np.log(ZDat[i])*(abs(np.log(ZDat[i])-np.log(ar0_))<=ar0x_)+np.log(ar0_)*(abs(np.log(ZDat[i])-np.log(ar0_))>ar0x_))
@@ -743,10 +743,6 @@ if __name__ == '__main__':
                                     P_1[0:2]=np.polyfit(x,y_1,1)
                                     P_2[0:2]=np.polyfit(x,y_2,1)
                                     
-                                    # P_1[0]=np.std(y_1)/np.std(x)
-                                    # P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)    
-                                    # P_2[0]=np.std(y_2)/np.std(x)
-                                    # P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)   
                                     if not abs(P_1[0]-1)<0.5 or not abs(P_2[0]-1)<0.5 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
                                         PP=0
                                 if not PP==0:
@@ -797,12 +793,12 @@ if __name__ == '__main__':
                         dd2=np.amin(dd2a[iGr,max(0,(hhh+1)-int(dNIt/2+1)):hhh+1],axis=0)
                         
                         if Lo:
-                            arr_RezM[iGr][Nf-NNew:]=filterFourierQ((dd1),np.log(ar0_),NNew,1,1)[Nf-NNew:]
-                            arr_RezN[iGr][Nf-NNew:]=filterFourierQ((dd2),np.log(ar0_),NNew,1,1)[Nf-NNew:]
+                            arr_RezM[iGr][Nf-NNew:]=dd1[Nf-NNew:]
+                            arr_RezN[iGr][Nf-NNew:]=dd2[Nf-NNew:]
                         else: 
-                            arr_RezM[iGr][Nf-NNew:]=filterFourierQ((dd1),(ar0_),NNew,1,1)[Nf-NNew:]
-                            arr_RezN[iGr][Nf-NNew:]=filterFourierQ((dd2),(ar0_),NNew,1,1)[Nf-NNew:]
-                        all_RezNM[iGr][hhh]=arr_RezM[iGr].copy()
+                            arr_RezM[iGr][Nf-NNew:]=dd1[Nf-NNew:]
+                            arr_RezN[iGr][Nf-NNew:]=dd2[Nf-NNew:]                        
+                        
                         if Lo:
                             x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
                         else:
@@ -824,9 +820,9 @@ if __name__ == '__main__':
                             all_RezMM[iGr][hhh]=all_RezNM[iGr][hhh].copy()
                         
                         if Lo:
-                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1,1))[Nf-NNew:]
+                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1))[Nf-NNew:]
                         else: 
-                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1,1))[Nf-NNew:]
+                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1))[Nf-NNew:]
                         
                         if Lo:
                             x=np.log(ar0[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])

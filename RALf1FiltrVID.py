@@ -125,9 +125,9 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
     gg=gg/NChan   
-    for l in range(NChan):  
-        arxr[Nfl_*l:Nfl_-Nnl+Nfl_*l]=arb[Nfl_*l:Nfl_-Nnl+Nfl_*l].copy()
-        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]+gg
+    #for l in range(NChan):  
+        #arxr[Nfl_*l:Nfl_-Nnl+Nfl_*l]=arb[Nfl_*l:Nfl_-Nnl+Nfl_*l].copy()
+        #arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]+gg
     
     return arxr
 
