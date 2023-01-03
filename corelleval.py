@@ -519,7 +519,7 @@ if __name__ == '__main__':
                     ar0x=np.median(ZDat,axis=0)
                     ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
                 
-                #ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
+                ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
                 # if not sum(abs(arr_rezBzz))==0:
                 #     ar0x=arr_rezBzz.copy()
@@ -743,16 +743,7 @@ if __name__ == '__main__':
                                         x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
                                         y_1=filterFourierQ(aMx_,(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
                                         y_2=filterFourierQ(aMn_,(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    # if Lo:
-                                    #     x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
-                                    #     y_1=aMx_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    #     y_2=aMn_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-
-                                    # else:
-                                    #     x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    #     y_1=aMx_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    #     y_2=aMn_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    
+                                  
                                     P_1=P.copy()
                                     P_2=P.copy()
                                     P_1[0:2]=np.polyfit(x,y_1,1)
@@ -771,16 +762,6 @@ if __name__ == '__main__':
                                         arr_RezN[iGr][Nf-NNew:]=(filterFourierQ(aMn_,(ar0_),NNew,1)[Nf-NNew:]-P_2[1])/P_2[0]
                                         arr_RezM[iGr][:Nf-NNew]=ar0_[:Nf-NNew].copy()
                                         arr_RezN[iGr][:Nf-NNew]=ar0_[:Nf-NNew].copy()
-                                    # if Lo:
-                                    #     arr_RezM[iGr][Nf-NNew:]=(aMx_[Nf-NNew:]-P_1[1])/P_1[0]
-                                    #     arr_RezN[iGr][Nf-NNew:]=(aMn_[Nf-NNew:]-P_2[1])/P_2[0]
-                                    #     arr_RezM[iGr][:Nf-NNew]=np.log(ar0_[:Nf-NNew])
-                                    #     arr_RezN[iGr][:Nf-NNew]=np.log(ar0_[:Nf-NNew])
-                                    # else:
-                                    #     arr_RezM[iGr][Nf-NNew:]=(aMx_[Nf-NNew:]-P_1[1])/P_1[0]
-                                    #     arr_RezN[iGr][Nf-NNew:]=(aMn_[Nf-NNew:]-P_2[1])/P_2[0]
-                                    #     arr_RezM[iGr][:Nf-NNew]=ar0_[:Nf-NNew].copy()
-                                    #     arr_RezN[iGr][:Nf-NNew]=ar0_[:Nf-NNew].copy()                                
                                     aMx0=aMx_.copy()
                                     aMn0=aMn_.copy()
                                                                                                
@@ -834,10 +815,7 @@ if __name__ == '__main__':
                         P_2[0:2]=np.polyfit(x,y_2,1)
                         # P[0]=np.std(y)/np.std(x)
                         # P[1]=np.mean(y)-P[0]*np.mean(x)
-                        P_1[0]=np.std(y_1)/np.std(x)
-                        P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
-                        P_2[0]=np.std(y_2)/np.std(x)
-                        P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
+
                         PP=(abs(P_1[0]-1)>1) or (abs(P_2[0]-1)>1)
    
                         all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
