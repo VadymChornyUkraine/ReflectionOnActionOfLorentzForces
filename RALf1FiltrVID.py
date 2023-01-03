@@ -153,7 +153,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
     sz=Nf*NChan
     MM=2
     Nzz=3
-    Nhh=4
+    Nhh=8
     
     Ndel=MM
     NCh=int(np.ceil(sz/Ndel))  
