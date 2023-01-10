@@ -472,19 +472,25 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             max_dd1[hh]=rr2[hh].copy()
                             min_dd2[hh]=rr2[hh].copy()
                             for l in range(NChan):
-                                if hh==0:
+                                #if hh==0:
                                      max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=dd1[Nf-NNew+Nf*l:Nf+Nf*l].copy()
                                      min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=dd2[Nf-NNew+Nf*l:Nf+Nf*l].copy()
-                                else:
-                                     max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(max_dd1[hh-1,Nf-NNew+Nf*l:Nf+Nf*l]*hh+
-                                                                       (dd1[Nf-NNew+Nf*l:Nf+Nf*l]))/(hh+1)
-                                     min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(min_dd2[hh-1,Nf-NNew+Nf*l:Nf+Nf*l]*hh+
-                                                                       (dd2[Nf-NNew+Nf*l:Nf+Nf*l]))/(hh+1)
+                                # else:
+                                #      max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(max_dd1[hh-1,Nf-NNew+Nf*l:Nf+Nf*l]*hh+
+                                #                                        (dd1[Nf-NNew+Nf*l:Nf+Nf*l]))/(hh+1)
+                                #      min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(min_dd2[hh-1,Nf-NNew+Nf*l:Nf+Nf*l]*hh+
+                                #                                        (dd2[Nf-NNew+Nf*l:Nf+Nf*l]))/(hh+1)
                                                                                
                             hh=hh+1
                             ann=0         
-                            rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
-                            rr2[hh]=filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan) 
+                            #rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
+                            dd1=max_dd1[hh-1].copy()
+                            dd2=min_dd2[hh-1].copy()
+                            dd0=(dd1+dd2)/2
+                            asr1=abs(dd1-dd0)>abs(dd2-dd0)
+                            asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
+                            rr2[hh]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
+                            rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan))/hh 
                             sr2=[]
                             sarr_c=[]
                             for l in range(NChan):  
