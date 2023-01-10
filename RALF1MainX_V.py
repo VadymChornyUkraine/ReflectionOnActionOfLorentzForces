@@ -23,7 +23,7 @@ from RALf1FiltrVID import RandomQ
 import RALF1FilterX as XFilter  
 
 WhO=[
-"SOL-USD" 
+"LRC-USD" 
     ]
 
 MxTime=1*60*60 # 2 haurs
@@ -781,9 +781,17 @@ if __name__ == '__main__':
                         # P[1]=np.mean(y)-P[0]*np.mean(x)
 
                         PP=(abs(P_1[0]-1)>1) or (abs(P_2[0]-1)>1)
+                        
+                        dd1=(arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                        dd2=(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0]
+                    
+                        dd0=(dd1+dd2)/2
+                        asr1=abs(dd1-dd0)>abs(dd2-dd0)
+                        asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
+                        all_RezNM[iGr][hhh][Nf-NNew:]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
    
-                        all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
-                                                           +(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0])
+                        # all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                        #                                    +(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0])
                             
                         if not astart0==np.Inf:
                             all_RezMM[iGr][hhh]=np.cumsum(all_RezNM[iGr][hhh])
