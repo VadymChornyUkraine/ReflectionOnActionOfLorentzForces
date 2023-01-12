@@ -7,7 +7,7 @@ import time as tm
 import csv
 import gtcsv as gtscvv
 
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WWW/"
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX2/"
 
 Lo=1
 WhO=[
@@ -137,7 +137,7 @@ def loaddata(aLengt,ticker1,key):
         
     return arrr,adat_
 
-gtscvv.getcsv(WhO,1,wrkdir)
+#gtscvv.getcsv(WhO,1,wrkdir)
 arrrxxR=[]
 nams=[]
 lenar=[]

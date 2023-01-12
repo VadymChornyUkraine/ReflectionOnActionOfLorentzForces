@@ -18,7 +18,7 @@ def getcsv(WhO,xYears,wrkdir):
             anm=anm
             
             
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WWW/"
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX4/"
 
 WhO=[
 "BTC-USD", 

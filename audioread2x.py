@@ -46,20 +46,21 @@ KPP=0
 
 def decimat(adat_):
     if Lo:
-        adat_=np.log(adat_)
+        if sum(adat_<=0)==0:
+            adat_=np.log(adat_)
+        else:
+            return 0
+                
     adatx=0
     k=0
     adat__=np.zeros(int(len(adat_)/aDecm),float)
-    for i in range(len(adat_)):
-        adatx=adatx+adat_[i]
-        if int(i/aDecm)*aDecm==i and i>0:
-            adat__[k]=adatx/aDecm
-            k=k+1
-            adatx=0
+    for i in range(int(len(adat_)/aDecm)):
+        adat__[k]=np.mean(adat_[i*aDecm:i*aDecm+aDecm])
+        k=k+1
     if Lo:
-        return np.exp(adat__[1:len(adat__)-1])
+        return np.exp(adat__[1:len(adat__)])
     else:
-        return (adat__[1:int(0.8*len(adat__))-1])
+        return (adat__[1:len(adat__)])
 
 def fig2img ( fig ):
     fig.savefig(wrkdir +'dynamic.png',dpi=150,transparent=False,bbox_inches = 'tight')
@@ -274,10 +275,11 @@ if __name__ == '__main__':
                 
                 arezAMx_=[] 
                 # for iProc in range(Nproc):
-                #     arezAMx_.append(RALf1FiltrQ(argss[iProc]))
+                #     aaa=RALf1FiltrQ(argss[iProc])
+                #     arezAMx_.append(aaa)
                 
                 pool = mp.Pool(processes=Nproc)
-                arezAMx_.append(pool.map(RALf1FiltrQ, argss))
+                pool.map(RALf1FiltrQ, argss)
                 #arezAMx= np.asarray(arezAMx,float)[0,:,:]
                 del(pool)
 
@@ -324,18 +326,18 @@ if __name__ == '__main__':
             ZDat=xxxx.copy()        
             
             anI=len(ZDat)
-            for i in range(anI):  
-                if Lo:
-                    ZDat[i][:len(ar0)]=np.log(ar0)
-                else:
-                    ZDat[i][:len(ar0)]=ar0.copy()
+            # for i in range(anI):  
+            #     if Lo:
+            #         ZDat[i][:len(ar0)]=np.log(ar0)
+            #     else:
+            #         ZDat[i][:len(ar0)]=ar0.copy()
             
             if Lo:
                 ar0x=np.exp(np.median(ZDat,axis=0))  
-                ar0x_=1.5*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
             else:
                 ar0x=np.median(ZDat,axis=0)
-                ar0x_=1.5*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
             for i in range(anI):    
                 if Lo:                                
@@ -344,13 +346,13 @@ if __name__ == '__main__':
                     ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
             if Lo:
                 ar0x=np.exp(np.median(ZDat,axis=0))  
-                ar0x_=1.5*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 ZDat=np.exp(ZDat)
             else:
                 ar0x=np.median(ZDat,axis=0)
-                ar0x_=1.5*(np.median(abs((ZDat)-(ar0x)),axis=0))        
+                ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
             
-            ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
+            #ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
             # ar0x=ar0.copy()
             # if not sum(abs(arr_rezBzz))==0:
             #     ar0x=arr_rezBzz.copy()
@@ -377,19 +379,25 @@ if __name__ == '__main__':
                 arr_RezM=  np.zeros((Ngroup,Nf),float)  
                 arr_RezN=  np.zeros((Ngroup,Nf),float)  
                 MMM=0
-                for iGr in range(Ngroup):                
+                for iGr in range(Ngroup):
                     if Lo:
-                        ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)])
+                        ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)])
                     else:
-                        ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
+                        ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
+                        
+                # for iGr in range(Ngroup):                
+                #     if Lo:
+                #         ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)])
+                #     else:
+                #         ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
                     xxxx=ZDat.copy()
                     for i in range(aNN-1):
                         xxxx=np.concatenate((xxxx, ZDat))
                     ZDat=xxxx.copy()
                     hhhx=0
                     anI=len(ZDat)
-                    for i in range(anI):  
-                        ZDat[i][:len(ar0)]=ar0.copy()
+                    # for i in range(anI):  
+                    #     ZDat[i][:len(ar0)]=ar0.copy()
                     for i in range(anI):
                         if Lo:                                
                             ZDat[i]=np.exp(np.log(ZDat[i])*(abs(np.log(ZDat[i])-np.log(ar0_))<=ar0x_)+np.log(ar0_)*(abs(np.log(ZDat[i])-np.log(ar0_))>ar0x_))
@@ -425,7 +433,7 @@ if __name__ == '__main__':
                         aa=RandomQ(Nf)                        
                         ss0=np.concatenate((aa, aa, aa))
                         hhhx=0
-                        while hhhx<int(NIter/3):
+                        while hhhx<int(NIter):
                             #if dNIt*int(hhhx/dNIt)==hhhx:
                             mdd4=mdd4*0
                             dd=ZDat.copy()                        
@@ -455,6 +463,7 @@ if __name__ == '__main__':
                             DD_=np.asarray(DD_,float)                              
                             DD_=(DD_/np.std(DD_))*D
                             DD_=(DD_-np.mean(DD_))
+                            #DD_=DD_*0
                                                     
                             P=np.zeros(3,float)
                             PP=1
@@ -561,50 +570,54 @@ if __name__ == '__main__':
                                 
                                 if Lo:
                                     x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
-                                    y=0.5*(filterFourierQ(aMx_,np.log(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    +filterFourierQ(aMn_,np.log(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    )
+                                    y_1=filterFourierQ(aMx_,np.log(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+                                    y_2=filterFourierQ(aMn_,np.log(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+
                                 else:
                                     x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    y=0.5*(filterFourierQ(aMx_,(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                    +filterFourierQ(aMn_,(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy())
+                                    y_1=filterFourierQ(aMx_,(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+                                    y_2=filterFourierQ(aMn_,(ar0_),NNew,1)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+                              
+                                P_1=P.copy()
+                                P_2=P.copy()
+                                P_1[0:2]=np.polyfit(x,y_1,1)
+                                P_2[0:2]=np.polyfit(x,y_2,1)
                                 
-                                P[0:2]=np.polyfit(x,y,1)
+                                P_1[0]=np.std(y_1)/np.std(x)
+                                P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
+                                P_2[0]=np.std(y_2)/np.std(x)
+                                P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
+                                #not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 
                                 
-                                if abs(P[0]-1)>0.5 or 100*scp.pearsonr(x,P[0]*y)[0]<10:
+                                if 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
                                     PP=0
                             if not PP==0:
-                                # P[0]=np.std(y)/np.std(x)
-                                # P[1]=np.mean(y)-P[0]*np.mean(x)
                                 if Lo:
-                                    arr_RezM[iGr][Nf-NNew:]=0.5*((filterFourierQ(aMx_,np.log(ar0_),NNew,1)[Nf-NNew:]
-                                        +filterFourierQ(aMn_,np.log(ar0_),NNew,1)[Nf-NNew:])-P[1])/P[0]
+                                    arr_RezM[iGr][Nf-NNew:]=(filterFourierQ(aMx_,np.log(ar0_),NNew,1)[Nf-NNew:]-P_1[1])/P_1[0]
+                                    arr_RezN[iGr][Nf-NNew:]=(filterFourierQ(aMn_,np.log(ar0_),NNew,1)[Nf-NNew:]-P_2[1])/P_2[0]
                                     arr_RezM[iGr][:Nf-NNew]=np.log(ar0_[:Nf-NNew])
+                                    arr_RezN[iGr][:Nf-NNew]=np.log(ar0_[:Nf-NNew])
                                 else:
-                                    arr_RezM[iGr][Nf-NNew:]=0.5*((filterFourierQ(aMx_,(ar0_),NNew,1)[Nf-NNew:]
-                                        +filterFourierQ(aMn_,(ar0_),NNew,1)[Nf-NNew:])-P[1])/P[0]
+                                    arr_RezM[iGr][Nf-NNew:]=(filterFourierQ(aMx_,(ar0_),NNew,1)[Nf-NNew:]-P_1[1])/P_1[0]
+                                    arr_RezN[iGr][Nf-NNew:]=(filterFourierQ(aMn_,(ar0_),NNew,1)[Nf-NNew:]-P_2[1])/P_2[0]
                                     arr_RezM[iGr][:Nf-NNew]=ar0_[:Nf-NNew].copy()
-                                
+                                    arr_RezN[iGr][:Nf-NNew]=ar0_[:Nf-NNew].copy()
                                 aMx0=aMx_.copy()
                                 aMn0=aMn_.copy()
-                                arr_RezN[iGr]=arr_RezM[iGr].copy()
-                                                               
-                                if dNIt*int(hhhx/dNIt)==hhhx:
-                                    all_RezM[iGr][hhh]=arr_RezM[iGr].copy()
-                                    all_RezN[iGr][hhh]=arr_RezN[iGr].copy()
-                                allaMx=np.maximum(all_RezM[iGr][hhh],arr_RezM[iGr])
-                                allaMn=np.minimum(all_RezN[iGr][hhh],arr_RezN[iGr])
-                                y=0.5*(allaMx+allaMn)[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                P[0:2]=np.polyfit(x,y,1)
-                                if not 100*scp.pearsonr(x,y)[0]<10 and not PP==0:
-                                    all_RezM[iGr][hhh]=allaMx.copy()
-                                    all_RezN[iGr][hhh]=allaMn.copy()                                    
-                                    if hhhx==0:
-                                        dd1a[iGr,hhh]=(all_RezM[iGr][hhh]-P[1])/P[0]
-                                        dd2a[iGr,hhh]=(all_RezN[iGr][hhh]-P[1])/P[0]
+                                                                                           
+                                if not PP==0:                                    
+                                    if dNIt*int(hhhx/dNIt)==hhhx:
+                                        all_RezM[iGr][hhh]=arr_RezM[iGr].copy()
+                                        all_RezN[iGr][hhh]=arr_RezN[iGr].copy() 
                                     else:
-                                        dd1a[iGr,hhh]=(dd1a[iGr,hhh]*hhhx+(all_RezM[iGr][hhh]-P[1]))/(hhhx+1)
-                                        dd2a[iGr,hhh]=(dd2a[iGr,hhh]*hhhx+(all_RezN[iGr][hhh]-P[1]))/(hhhx+1)                                
+                                        all_RezM[iGr][hhh]=np.maximum(all_RezM[iGr][hhh],arr_RezM[iGr])
+                                        all_RezN[iGr][hhh]=np.minimum(all_RezN[iGr][hhh],arr_RezN[iGr])                                        
+                                    if hhhx==0:
+                                        dd1a[iGr,hhh]=(all_RezM[iGr][hhhx]).copy()#-P[1])/P[0]
+                                        dd2a[iGr,hhh]=(all_RezN[iGr][hhhx]).copy()#-P[1])/P[0]
+                                    else:
+                                        dd1a[iGr,hhh]=(dd1a[iGr,hhh]*hhhx+(all_RezM[iGr][hhh]))/(hhhx+1)#-P[1])/P[0])/(hhhx+1)
+                                        dd2a[iGr,hhh]=(dd2a[iGr,hhh]*hhhx+(all_RezN[iGr][hhh]))/(hhhx+1)#-P[1])/P[0])/(hhhx+1)                                
                                     hhhx=hhhx+1
                                 else:
                                     PP=0
@@ -625,31 +638,52 @@ if __name__ == '__main__':
                     dd2=np.amin(dd2a[iGr,max(0,(hhh+1)-int(dNIt/2+1)):hhh+1],axis=0)
                     
                     if Lo:
-                        arr_RezM[iGr][Nf-NNew:]=0.5*(filterFourierQ((dd1),np.log(ar0_),NNew,1)+filterFourierQ((dd2),np.log(ar0_),NNew,1))[Nf-NNew:]
+                        arr_RezM[iGr][Nf-NNew:]=dd1[Nf-NNew:]
+                        arr_RezN[iGr][Nf-NNew:]=dd2[Nf-NNew:]
                     else: 
-                        arr_RezM[iGr][Nf-NNew:]=0.5*(filterFourierQ((dd1),(ar0_),NNew,1)+filterFourierQ((dd2),(ar0_),NNew,1))[Nf-NNew:]
-                    all_RezNM[iGr][hhh]=arr_RezM[iGr].copy()
+                        arr_RezM[iGr][Nf-NNew:]=dd1[Nf-NNew:]
+                        arr_RezN[iGr][Nf-NNew:]=dd2[Nf-NNew:]
+                  
                     if Lo:
                         x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
                     else:
                         x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
                     
-                    y=all_RezNM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                    P[0:2]=np.polyfit(x,y,1)
-                    PP=abs(P[0]-1)>0.5
-                    # P[0]=np.std(y)/np.std(x)
-                    # P[1]=np.mean(y)-P[0]*np.mean(x)
-                    all_RezNM[iGr][hhh][Nf-NNew:]=(all_RezNM[iGr][hhh][Nf-NNew:]-P[1])/P[0]
+                    y_1=arr_RezM[iGr][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+                    y_2=arr_RezN[iGr][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+                    P_1[0:2]=np.polyfit(x,y_1,1)                    
+                    P_2[0:2]=np.polyfit(x,y_2,1)
+                    P_1[0]=np.std(y_1)/np.std(x)
+                    P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
+                    P_2[0]=np.std(y_2)/np.std(x)
+                    P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
+
+                    PP=0#(abs(P_1[0]-1)>1) or (abs(P_2[0]-1)>1)
+                    
+                    # dd1=(arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                    # dd2=(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0]
+                
+                    # dd0=(dd1+dd2)/2
+                    # asr1=abs(dd1-dd0)>abs(dd2-dd0)
+                    # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
+                    #all_RezNM[iGr][hhh][Nf-NNew:]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
+
+                    all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                                                        +(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0])
                         
                     if not astart0==np.Inf:
                         all_RezMM[iGr][hhh]=np.cumsum(all_RezNM[iGr][hhh])
                     else:
                         all_RezMM[iGr][hhh]=all_RezNM[iGr][hhh].copy()
                     
+                    # if Lo:
+                    #     all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1))[Nf-NNew:]
+                    # else: 
+                    #     all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1))[Nf-NNew:]
                     if Lo:
-                        all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1))[Nf-NNew:]
+                        all_RezMM[iGr][hhh][Nf-NNew:]=all_RezMM[iGr][hhh][Nf-NNew:]
                     else: 
-                        all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1))[Nf-NNew:]
+                        all_RezMM[iGr][hhh][Nf-NNew:]=all_RezMM[iGr][hhh][Nf-NNew:]
                     
                     if Lo:
                         x=np.log(ar0[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
@@ -659,9 +693,10 @@ if __name__ == '__main__':
                     y=all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()                                       
                     
                     P[0:2]=np.polyfit(x,y,1)
-                    # P[0]=np.std(y)/np.std(x)
-                    # P[1]=np.mean(y)-P[0]*np.mean(x)
-                    if PP or abs(P[0]-1)>0.5 or 100*scp.pearsonr(x,all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])[0]<20:
+                    P[0]=np.std(y)/np.std(x)
+                    P[1]=np.mean(y)-P[0]*np.mean(x)
+                    #if PP or abs(P[0]-1)>1 or 
+                    if 100*scp.pearsonr(x,all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])[0]<20:
                         MMM=MMM+1
                     all_RezMM[iGr][hhh][Nf-NNew:]=(all_RezMM[iGr][hhh][Nf-NNew:]-P[1])/P[0]
                     if Lo:

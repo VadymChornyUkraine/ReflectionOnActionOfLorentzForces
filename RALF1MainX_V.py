@@ -23,10 +23,10 @@ from RALf1FiltrVID import RandomQ
 import RALF1FilterX as XFilter  
 
 WhO=[
-"LRC-USD" 
+"SOL-USD" 
     ]
 
-MxTime=1*60*60 # 2 haurs
+MxTime=0.25*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
 wrkdir = r"/home/vacho/Документи/Work/W14_7/WX4/"
 api_key = 'ONKTYPV6TAMZK464' 
@@ -777,21 +777,23 @@ if __name__ == '__main__':
                         y_2=arr_RezN[iGr][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
                         P_1[0:2]=np.polyfit(x,y_1,1)                    
                         P_2[0:2]=np.polyfit(x,y_2,1)
-                        # P[0]=np.std(y)/np.std(x)
-                        # P[1]=np.mean(y)-P[0]*np.mean(x)
+                        P_1[0]=np.std(y_1)/np.std(x)
+                        P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
+                        P_2[0]=np.std(y_2)/np.std(x)
+                        P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
 
-                        PP=(abs(P_1[0]-1)>1) or (abs(P_2[0]-1)>1)
+                        PP=0#(abs(P_1[0]-1)>1) or (abs(P_2[0]-1)>1)
                         
-                        dd1=(arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
-                        dd2=(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0]
+                        # dd1=(arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                        # dd2=(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0]
                     
-                        dd0=(dd1+dd2)/2
-                        asr1=abs(dd1-dd0)>abs(dd2-dd0)
-                        asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
-                        all_RezNM[iGr][hhh][Nf-NNew:]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
+                        # dd0=(dd1+dd2)/2
+                        # asr1=abs(dd1-dd0)>abs(dd2-dd0)
+                        # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
+                        #all_RezNM[iGr][hhh][Nf-NNew:]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
    
-                        # all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
-                        #                                    +(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0])
+                        all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                                                            +(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0])
                             
                         if not astart0==np.Inf:
                             all_RezMM[iGr][hhh]=np.cumsum(all_RezNM[iGr][hhh])
@@ -815,9 +817,10 @@ if __name__ == '__main__':
                         y=all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()                                       
                         
                         P[0:2]=np.polyfit(x,y,1)
-                        # P[0]=np.std(y)/np.std(x)
-                        # P[1]=np.mean(y)-P[0]*np.mean(x)
-                        if PP or abs(P[0]-1)>1 or 100*scp.pearsonr(x,all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])[0]<20:
+                        P[0]=np.std(y)/np.std(x)
+                        P[1]=np.mean(y)-P[0]*np.mean(x)
+                        #if PP or abs(P[0]-1)>1 or 
+                        if 100*scp.pearsonr(x,all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])[0]<20:
                             MMM=MMM+1
                         all_RezMM[iGr][hhh][Nf-NNew:]=(all_RezMM[iGr][hhh][Nf-NNew:]-P[1])/P[0]
                         if Lo:

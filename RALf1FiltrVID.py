@@ -483,13 +483,13 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                                                                                
                             hh=hh+1
                             ann=0         
-                            #rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
-                            dd1=max_dd1[hh-1].copy()
-                            dd2=min_dd2[hh-1].copy()
-                            dd0=(dd1+dd2)/2
-                            asr1=abs(dd1-dd0)>abs(dd2-dd0)
-                            asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
-                            rr2[hh]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
+                            rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
+                            # dd1=max_dd1[hh-1].copy()
+                            # dd2=min_dd2[hh-1].copy()
+                            # dd0=(dd1+dd2)/2
+                            # asr1=abs(dd1-dd0)>abs(dd2-dd0)
+                            # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
+                            # rr2[hh]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
                             rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan))/hh 
                             sr2=[]
                             sarr_c=[]
@@ -502,6 +502,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             sarr_c=sarr_c.reshape((len(sarr_c)*len(sarr_c[0])))   
                             
                             P[0:2]=np.polyfit(sarr_c,sr2,1)  
+                            P[0]=np.std(sr2)/np.std(sarr_c)
+                            P[1]=np.mean(sr2)-P[0]*np.mean(sarr_c) 
                             
                             if P[0]>0:  
                                 #100*scp.pearsonr(sarr_c,sr2)[0]>10 and
@@ -581,7 +583,7 @@ def RALf1FiltrQ(args):
     aa=RandomQ(NNew0)
     aa=aa-np.mean(aa)
     aa=2*aa/np.std(aa)*np.std(arr_b)
-    ss4=np.concatenate((aa, aa, aa, aa)) 
+    ss4=np.concatenate((aa, aa, aa, aa)) #*0
     for l in range(NChan):
         arr_c.append(arr_b[Nf-NNew0+Nf*l:Nf-NNew+Nf*l].copy()) 
         arr_b[Nf-NNew0-1+Nf*l:Nf+Nf*l]=(astar0==np.Inf)*arr_b[Nf-NNew0+Nf*l-1]+ss4[l:NNew0+l+1]
