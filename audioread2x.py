@@ -19,7 +19,7 @@ from RALf1FiltrVID import RALf1FiltrQ
 from RALf1FiltrVID import RandomQ
 import RALF1FilterX as XFilter
 
-MxTime=1*60*60 # 2 haurs
+MxTime=0.5*60*60 # 2 haurs
 
 import cv2 as cv
 
@@ -583,13 +583,13 @@ if __name__ == '__main__':
                                 P_1[0:2]=np.polyfit(x,y_1,1)
                                 P_2[0:2]=np.polyfit(x,y_2,1)
                                 
-                                P_1[0]=np.std(y_1)/np.std(x)
-                                P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
-                                P_2[0]=np.std(y_2)/np.std(x)
-                                P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
+                                # P_1[0]=np.std(y_1)/np.std(x)
+                                # P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
+                                # P_2[0]=np.std(y_2)/np.std(x)
+                                # P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
                                 #not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 
                                 
-                                if 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
+                                if not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
                                     PP=0
                             if not PP==0:
                                 if Lo:
