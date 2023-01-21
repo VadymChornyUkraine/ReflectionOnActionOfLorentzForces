@@ -493,11 +493,11 @@ if __name__ == '__main__':
                 ZDat=xxxx.copy()        
                 
                 anI=len(ZDat)
-                # for i in range(anI):  
-                #     if Lo:
-                #         ZDat[i][:len(ar0)]=np.log(ar0)
-                #     else:
-                #         ZDat[i][:len(ar0)]=ar0.copy()
+                for i in range(anI):  
+                    if Lo:
+                        ZDat[i][:len(ar0)]=np.log(ar0)
+                    else:
+                        ZDat[i][:len(ar0)]=ar0.copy()
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
@@ -519,7 +519,7 @@ if __name__ == '__main__':
                     ar0x=np.median(ZDat,axis=0)
                     ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
                 
-                #ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
+                ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
                 # if not sum(abs(arr_rezBzz))==0:
                 #     ar0x=arr_rezBzz.copy()
@@ -563,8 +563,8 @@ if __name__ == '__main__':
                         ZDat=xxxx.copy()
                         hhhx=0
                         anI=len(ZDat)
-                        # for i in range(anI):  
-                        #     ZDat[i][:len(ar0)]=ar0.copy()
+                        for i in range(anI):  
+                            ZDat[i][:len(ar0)]=ar0.copy()
                         for i in range(anI):
                             if Lo:                                
                                 ZDat[i]=np.exp(np.log(ZDat[i])*(abs(np.log(ZDat[i])-np.log(ar0_))<=ar0x_)+np.log(ar0_)*(abs(np.log(ZDat[i])-np.log(ar0_))>ar0x_))
@@ -756,7 +756,7 @@ if __name__ == '__main__':
                                     # P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
                                     #not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 
                                     
-                                    if not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
+                                    if not abs(P_1[0]-1)<0.5 or not abs(P_2[0]-1)<0.5 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
                                         PP=0
                                 if not PP==0:
                                     if Lo:
