@@ -152,8 +152,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
     warnings.filterwarnings("ignore", category=RuntimeWarning) 
     sz=Nf*NChan
     MM=2
-    Nzz=3
-    Nhh=8
+    Nzz=4
+    Nhh=10
     
     Ndel=MM
     NCh=int(np.ceil(sz/Ndel))  
@@ -456,8 +456,10 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     
                         P_1=P.copy()
                         P_2=P.copy()
-                        # P_1[0:2]=np.polyfit(sarr_c,sr2_1,1)
-                        # P_2[0:2]=np.polyfit(sarr_c,sr2_2,1)
+                        sr2=(sr2_1+sr2_2)/2
+                        
+                        P_1[0:2]=np.polyfit(sarr_c,sr2,1)
+                        P_2[0:2]=np.polyfit(sarr_c,sr2,1)
                         
                         P_1[0]=np.std(sr2_1)/np.std(sarr_c)
                         P_1[1]=np.mean(sr2_1)-P_1[0]*np.mean(sarr_c) 
