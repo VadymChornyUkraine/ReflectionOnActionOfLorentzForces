@@ -315,10 +315,11 @@ if __name__ == '__main__':
                 WrtTodr=1
                 aDur=4
                                 
-            aNN=2
-            aMM=2
-            for iGr in range(Ngroup):                
-                ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hhh+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
+            aNN=3
+            aMM=3
+
+            for iGr in range(Ngroup):  
+                ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
                 if iGr==0:
                     xxxx=ZDat.copy()
                 else:
@@ -352,7 +353,7 @@ if __name__ == '__main__':
                 ar0x=np.median(ZDat,axis=0)
                 ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
             
-            #ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
+            ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
             # ar0x=ar0.copy()
             # if not sum(abs(arr_rezBzz))==0:
             #     ar0x=arr_rezBzz.copy()
@@ -375,21 +376,23 @@ if __name__ == '__main__':
             tm1=0
             aMx0=dd_*0-np.Inf
             aMn0=dd_*0+np.Inf
+            mm1=dd_*0
+            mm2=mm1.copy()
             while MMM_<2*Nproc and (tm1-tm0)<MxTime:              
                 arr_RezM=  np.zeros((Ngroup,Nf),float)  
                 arr_RezN=  np.zeros((Ngroup,Nf),float)  
                 MMM=0
-                for iGr in range(Ngroup):
-                    if Lo:
-                        ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)])
-                    else:
-                        ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
+                #for iGr in range(Ngroup):
+                    # if Lo:
+                    #     ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)])
+                    # else:
+                    #     ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
                         
-                # for iGr in range(Ngroup):                
-                #     if Lo:
-                #         ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)])
-                #     else:
-                #         ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
+                for iGr in range(Ngroup):   
+                    if Lo:
+                        ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)])
+                    else:
+                        ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
                     xxxx=ZDat.copy()
                     for i in range(aNN-1):
                         xxxx=np.concatenate((xxxx, ZDat))
@@ -589,7 +592,7 @@ if __name__ == '__main__':
                                 # P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
                                 #not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 
                                 
-                                if not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
+                                if not abs(P_1[0]-1)<0.5 or not abs(P_2[0]-1)<0.5 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
                                     PP=0
                             if not PP==0:
                                 if Lo:

@@ -23,19 +23,21 @@ from RALf1FiltrVID import RandomQ
 import RALF1FilterX as XFilter  
 
 WhO=[
-"SOL-USD",
-"LRC-USD",
-"DOT-USD",
-"LINK-USD",
-"IOTX-USD",
-"NMR-USD",
-"ATOM-USD",
-"DOGE-USD"
+# "SOL-USD",
+# "LRC-USD",
+# "DOT-USD",
+# "LINK-USD",
+# "IOTX-USD",
+# "NMR-USD",
+# "ATOM-USD",
+# "DOGE-USD",
+# "ADA-USD",
+"CELO-USD"
 ]
 
 MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX5/"
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX7/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -44,7 +46,7 @@ interv="Daily"
 #INTRADAY
 #d_intervals = {"1min","5min","15min","30min","60min"}
 
-Lengt0=700
+Lengt0=720
 Ngroup=3
 Nproc=2*Ngroup#*(os.cpu_count())
 Lo=1  
@@ -54,7 +56,7 @@ NIt=3
 NIter=100
 DT=0.3
 dNIt=4
-aDecm=3
+aDecm=2
 KPP=0
 
 aKEY=0
@@ -446,10 +448,11 @@ if __name__ == '__main__':
                     WrtTodr=1
                     aDur=4
                                     
-                aNN=2
-                aMM=2
-                for iGr in range(Ngroup):                
-                    ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hhh+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
+                aNN=3
+                aMM=3
+
+                for iGr in range(Ngroup):  
+                    ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
                     if iGr==0:
                         xxxx=ZDat.copy()
                     else:
@@ -506,21 +509,23 @@ if __name__ == '__main__':
                 tm1=0
                 aMx0=dd_*0-np.Inf
                 aMn0=dd_*0+np.Inf
+                mm1=dd_*0
+                mm2=mm1.copy()
                 while MMM_<2*Nproc and (tm1-tm0)<MxTime:              
                     arr_RezM=  np.zeros((Ngroup,Nf),float)  
                     arr_RezN=  np.zeros((Ngroup,Nf),float)  
                     MMM=0
-                    for iGr in range(Ngroup):
-                        if Lo:
-                            ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)])
-                        else:
-                            ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
+                    #for iGr in range(Ngroup):
+                        # if Lo:
+                        #     ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)])
+                        # else:
+                        #     ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
                             
-                    # for iGr in range(Ngroup):                
-                    #     if Lo:
-                    #         ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)])
-                    #     else:
-                    #         ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
+                    for iGr in range(Ngroup):   
+                        if Lo:
+                            ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)])
+                        else:
+                            ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
                         xxxx=ZDat.copy()
                         for i in range(aNN-1):
                             xxxx=np.concatenate((xxxx, ZDat))
