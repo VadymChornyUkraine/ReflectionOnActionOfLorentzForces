@@ -411,7 +411,7 @@ if __name__ == '__main__':
                 try:
                     [hhha,Arr_AAA]=(hkl.load(wrkdir + aname+".rlf1"))       
                 except:            
-                    hhha=hhh-1
+                    hhha=hh0-1
                                
                 #hhha=NIter 
                 if hh0>=hhha: 
@@ -471,7 +471,7 @@ if __name__ == '__main__':
                     arezAMx= np.asarray(arezAMx,float)*Klg+Asr
                      
                     for iGr in range(Ngroup):
-                        Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)]=(
+                        Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hh0*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)]=(
                             arezAMx[int(iGr*(Nproc/Ngroup)):int((iGr+1)*(Nproc/Ngroup))]).copy()
                                                  
                     hkl.dump([hh0+1,Arr_AAA], wrkdir + aname+".rlf1")  
@@ -548,13 +548,7 @@ if __name__ == '__main__':
                 while MMM_<2*Nproc and (tm1-tm0)<MxTime:              
                     arr_RezM=  np.zeros((Ngroup,Nf),float)  
                     arr_RezN=  np.zeros((Ngroup,Nf),float)  
-                    MMM=0
-                    #for iGr in range(Ngroup):
-                        # if Lo:
-                        #     ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)])
-                        # else:
-                        #     ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+hhh*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
-                            
+                    MMM=0                          
                     for iGr in range(Ngroup):   
                         if Lo:
                             ZDat=np.exp(Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)])
