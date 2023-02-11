@@ -588,7 +588,7 @@ def RALf1FiltrQ(args):
     ss4=np.concatenate((aa, aa, aa, aa)) #*0
     for l in range(NChan):
         arr_c.append(arr_b[Nf-NNew0+Nf*l:Nf-NNew+Nf*l].copy()) 
-        arr_b[Nf-NNew0-1+Nf*l:Nf+Nf*l]=(astar0==np.Inf)*arr_b[Nf-NNew0+Nf*l-1]+ss4[l:NNew0+l+1]
+        arr_b[Nf-NNew0+Nf*l:Nf+Nf*l]=(astar0==np.Inf)*arr_b[Nf-NNew0+Nf*l-1]+ss4[l:NNew0+l]
     arr_c=np.asarray(arr_c,float)
     arr_c=arr_c.reshape((len(arr_c)*len(arr_c[0])))
     
