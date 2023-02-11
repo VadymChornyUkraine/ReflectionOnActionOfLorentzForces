@@ -319,7 +319,7 @@ if __name__ == '__main__':
             aMM=3
 
             for iGr in range(Ngroup):  
-                ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
+                ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hhha+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhha+1)*int(Nproc/Ngroup)].copy()
                 if iGr==0:
                     xxxx=ZDat.copy()
                 else:
