@@ -585,7 +585,7 @@ def RALf1FiltrQ(args):
     aa=RandomQ(NNew0)
     aa=aa-np.mean(aa)
     aa=2*aa/np.std(aa)*np.std(arr_b)
-    ss4=np.concatenate((aa, aa, aa, aa)) #*0
+    ss4=np.concatenate((aa, aa, aa, aa)) *0
     for l in range(NChan):
         arr_c.append(arr_b[Nf-NNew0+Nf*l:Nf-NNew+Nf*l].copy()) 
         arr_b[Nf-NNew0+Nf*l:Nf+Nf*l]=(astar0==np.Inf)*arr_b[Nf-NNew0+Nf*l-1]+ss4[l:NNew0+l]
