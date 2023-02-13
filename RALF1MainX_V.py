@@ -220,6 +220,7 @@ if __name__ == '__main__':
         ticker=aname+"YLLL"
         ticker1=aname
         ticker2=aname
+
         try:
             dill.load_session(wrkdir + aname+".ralf")
             nnams_=hkl.load(wrkdir + "name_.rlf1")
@@ -286,14 +287,13 @@ if __name__ == '__main__':
             all_RezNM=np.zeros((Ngroup,NIter,Nf),float)
             all_RezMM=np.zeros((Ngroup,NIter,Nf),float)
             argss=[[0] for j in range(Nproc)]    
-    
-            hh0=0
+                                
+            Koef_=[]
             hhh=0
             hhh_=0
-                    
-            Koef_=[]
-            ZZ=0
             key=0
+            ZZ=0
+            hh0=0
             try:
                 dill.load_session(wrkdir + aname+".ralf")
                 nnams_=hkl.load(wrkdir + "name_.rlf1")
