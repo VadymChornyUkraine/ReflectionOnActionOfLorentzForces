@@ -119,9 +119,8 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         #     farxxx[2]=farxxx[2]*0
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
                    
-        aaa=-np.fft.ifft(farxxx).real
-        aaa=(-2*((key<0)-.5)*aaa[0:int(len(aaa)/2)]+aaa[int(len(aaa)/2):])/2
-        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=aaa[::-1].copy()[0:Nnl]
+        aaa=np.fft.ifft(farxxx).real
+        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=(aaa[Nnl:0:-1]-2*((key<0)-.5)*aaa[2*Nnl:Nnl-1:-1])/2
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
     gg=gg/NChan   
