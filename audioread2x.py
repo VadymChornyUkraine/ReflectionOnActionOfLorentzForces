@@ -659,12 +659,12 @@ if __name__ == '__main__':
                     y_2=arr_RezN[iGr][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
                     P_1[0:2]=np.polyfit(x,y_1,1)                    
                     P_2[0:2]=np.polyfit(x,y_2,1)
-                    P_1[0]=np.std(y_1)/np.std(x)
-                    P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
-                    P_2[0]=np.std(y_2)/np.std(x)
-                    P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
+                    # P_1[0]=np.std(y_1)/np.std(x)
+                    # P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
+                    # P_2[0]=np.std(y_2)/np.std(x)
+                    # P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
 
-                    PP=0#(abs(P_1[0]-1)>1) or (abs(P_2[0]-1)>1)
+                    PP=(abs(P_1[0]-1)>1) or (abs(P_2[0]-1)>1)
                     
                     # dd1=(arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
                     # dd2=(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0]
@@ -699,8 +699,8 @@ if __name__ == '__main__':
                     y=all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()                                       
                     
                     P[0:2]=np.polyfit(x,y,1)
-                    P[0]=np.std(y)/np.std(x)
-                    P[1]=np.mean(y)-P[0]*np.mean(x)
+                    # P[0]=np.std(y)/np.std(x)
+                    # P[1]=np.mean(y)-P[0]*np.mean(x)
                     #if PP or abs(P[0]-1)>1 or 
                     if 100*scp.pearsonr(x,all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])[0]<20:
                         MMM=MMM+1

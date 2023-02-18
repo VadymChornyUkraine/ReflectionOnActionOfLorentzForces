@@ -151,8 +151,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
     warnings.filterwarnings("ignore", category=RuntimeWarning) 
     sz=Nf*NChan
     MM=3
-    Nzz=4
-    Nhh=10
+    Nzz=3
+    Nhh=6
     
     Ndel=MM
     NCh=int(np.ceil(sz/Ndel))  
