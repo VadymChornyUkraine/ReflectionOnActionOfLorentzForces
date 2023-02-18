@@ -480,11 +480,11 @@ if __name__ == '__main__':
                         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                     ZDat=np.exp(ZDat)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
+                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
                 
                 ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
@@ -835,7 +835,7 @@ if __name__ == '__main__':
                         # P[0]=np.std(y)/np.std(x)
                         # P[1]=np.mean(y)-P[0]*np.mean(x)
                         #if PP or abs(P[0]-1)>1 or 
-                        if 100*scp.pearsonr(x,all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])[0]<20:
+                        if abs(P[0]-1)>1 or 100*scp.pearsonr(x,all_RezMM[iGr][hhh][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])[0]<20:
                             MMM=MMM+1
                         all_RezMM[iGr][hhh][Nf-NNew:]=(all_RezMM[iGr][hhh][Nf-NNew:]-P[1])/P[0]
                         if Lo:
