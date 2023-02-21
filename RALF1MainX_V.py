@@ -479,12 +479,12 @@ if __name__ == '__main__':
                     else:
                         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
                 if Lo:
-                    #ar0x=np.exp(np.median(ZDat,axis=0))  
+                    #ar0xx=np.exp(np.median(ZDat,axis=0))  
                     ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                     ZDat=np.exp(ZDat)
                 else:
-                    #ar0x=np.median(ZDat,axis=0)
-                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))             
+                    #ar0xx=np.median(ZDat,axis=0)
+                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
                 
                 ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
@@ -821,10 +821,10 @@ if __name__ == '__main__':
                         else:
                             all_RezMM[iGr][hhh]=all_RezNM[iGr][hhh].copy()
                         
-                        # if Lo:
-                        #     all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1))[Nf-NNew:]
-                        # else: 
-                        #     all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1))[Nf-NNew:]
+                        if Lo:
+                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1))[Nf-NNew:]
+                        else: 
+                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1))[Nf-NNew:]
                         if Lo:
                             all_RezMM[iGr][hhh][Nf-NNew:]=all_RezMM[iGr][hhh][Nf-NNew:]
                         else: 
@@ -853,7 +853,7 @@ if __name__ == '__main__':
                     
                     tm1=tm.time()
                     if (tm1-tm0)>MxTime:
-                        break
+                        break 
                     MMM=int(2*MMM/Ngroup)
                     arr_rezBz=np.mean(arr_RezM, axis=0) 
                     # arr_rezBz[1:]=np.diff(arr_rezBz)
