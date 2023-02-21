@@ -502,10 +502,10 @@ if __name__ == '__main__':
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
                 for i in range(anI):    
                     if Lo:                                
@@ -513,11 +513,11 @@ if __name__ == '__main__':
                     else:
                         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
                 if Lo:
-                    ar0x=np.exp(np.median(ZDat,axis=0))  
+                    #ar0x=np.exp(np.median(ZDat,axis=0))  
                     ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                     ZDat=np.exp(ZDat)
                 else:
-                    ar0x=np.median(ZDat,axis=0)
+                    #ar0x=np.median(ZDat,axis=0)
                     ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
                 
                 ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
@@ -673,9 +673,9 @@ if __name__ == '__main__':
                                         seqB=(dd2.reshape(len(dd2)*len(dd2[0])))[1:]*np.ceil(0.5*(1/(mdd4_.reshape(len(dd2)*len(dd2[0]))==1)[0:len(dd2)*len(dd2[0])-1]+1/(mdd4_.reshape(len(dd2)*len(dd2[0]))==1)[1:]))
                                         seqB=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqB)),float) 
                                         seqB=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqB)),float)    
-                                    
-                                        P[0:2]=np.polyfit(seqA,seqB,1)
+
                                         try:
+                                            P[0:2]=np.polyfit(seqA,seqB,1)
                                             if not abs(P[0]-1)>0.5 and 100*scp.pearsonr(seqA,seqB)[0]>50:
                                                 dd_CC[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=(dd2.copy()-P[1])/P[0] 
                                             else:
@@ -702,15 +702,18 @@ if __name__ == '__main__':
                                         except:
                                             PP=0    
                                             
-                                seq0_=(dd_CC.reshape(len(dd_CC)*len(dd_CC[0])))[1:]*np.ceil(0.5*(1/(mdd4.reshape(len(dd_CC)*len(dd_CC[0]))==1)[0:len(dd_CC)*len(dd_CC[0])-1]+1/(mdd4.reshape(len(dd_CC)*len(dd_CC[0]))==1)[1:]))
-                                seq0_=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seq0_)),float) 
-                                seq0_=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seq0_)),float)    
-                                
-                                P[0:2]=np.polyfit(seq0,seq0_,1)
-                                if not abs(P[0]-1)>0.5 and 100*scp.pearsonr(seq0,seq0_)[0]>50:
-                                    dd_CC=(dd_CC-P[1])/P[0] 
-                                else:
-                                    PP=0
+                                if not PP==0:                                            
+                                    seq0_=(dd_CC.reshape(len(dd_CC)*len(dd_CC[0])))[1:]*np.ceil(0.5*(1/(mdd4.reshape(len(dd_CC)*len(dd_CC[0]))==1)[0:len(dd_CC)*len(dd_CC[0])-1]+1/(mdd4.reshape(len(dd_CC)*len(dd_CC[0]))==1)[1:]))
+                                    seq0_=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seq0_)),float) 
+                                    seq0_=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seq0_)),float)    
+                                    try:
+                                        P[0:2]=np.polyfit(seq0,seq0_,1)
+                                        if not abs(P[0]-1)>0.5 and 100*scp.pearsonr(seq0,seq0_)[0]>50:
+                                            dd_CC=(dd_CC-P[1])/P[0] 
+                                        else:
+                                            PP=0
+                                    except:
+                                        PP=0
                                 if not PP==0:
                                     dd_AA=dd_CC*PP*(dd_CC>0)
                                     dd_BB=dd_CC*PP*(dd_CC<0)                                                                                     
@@ -753,16 +756,19 @@ if __name__ == '__main__':
                                   
                                     P_1=P.copy()
                                     P_2=P.copy()
-                                    P_1[0:2]=np.polyfit(x,y_1,1)
-                                    P_2[0:2]=np.polyfit(x,y_2,1)
-                                    
-                                    # P_1[0]=np.std(y_1)/np.std(x)
-                                    # P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
-                                    # P_2[0]=np.std(y_2)/np.std(x)
-                                    # P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
-                                    #not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 
-                                    
-                                    if not abs(P_1[0]-1)<0.5 or not abs(P_2[0]-1)<0.5 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
+                                    try:
+                                        P_1[0:2]=np.polyfit(x,y_1,1)
+                                        P_2[0:2]=np.polyfit(x,y_2,1)
+                                        
+                                        # P_1[0]=np.std(y_1)/np.std(x)
+                                        # P_1[1]=np.mean(y_1)-P_1[0]*np.mean(x)
+                                        # P_2[0]=np.std(y_2)/np.std(x)
+                                        # P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
+                                        #not abs(P_1[0]-1)<1 or not abs(P_2[0]-1)<1 or 
+                                        
+                                        if not abs(P_1[0]-1)<0.5 or not abs(P_2[0]-1)<0.5 or 100*scp.pearsonr(x,y_1)[0]<0 or 100*scp.pearsonr(x,y_2)[0]<0:
+                                            PP=0
+                                    except:
                                         PP=0
                                 if not PP==0:
                                     if Lo:
@@ -881,7 +887,7 @@ if __name__ == '__main__':
                     
                     tm1=tm.time()
                     if (tm1-tm0)>MxTime:
-                        break
+                        break 
                     MMM=int(2*MMM/Ngroup)
                     arr_rezBz=np.mean(arr_RezM, axis=0) 
                     # arr_rezBz[1:]=np.diff(arr_rezBz)
