@@ -319,7 +319,7 @@ if __name__ == '__main__':
             aMM=3
 
             for iGr in range(Ngroup):  
-                ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,0)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhha)*int(Nproc/Ngroup)].copy()
+                ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(0))*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhha)*int(Nproc/Ngroup)].copy()
                 if iGr==0:
                     xxxx=ZDat.copy()
                 else:
@@ -346,13 +346,19 @@ if __name__ == '__main__':
                 else:
                     ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
             if Lo:
-                #ar0xx=np.exp(np.median(ZDat,axis=0))  
+                ar0x=np.exp(np.median(ZDat,axis=0))  
                 ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
-                ZDat=np.exp(ZDat)
+                #ZDat=np.exp(ZDat)
             else:
-                #ar0xx=np.median(ZDat,axis=0)
-                ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))        
-            
+                ar0x=np.median(ZDat,axis=0)
+                ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
+                
+            for i in range(anI):    
+                if Lo:                                
+                    ZDat[i]=(ZDat[i]*(abs(ZDat[i]-np.log(ar0x))<=ar0x_))+np.log(ar0x)*(abs(ZDat[i]-np.log(ar0x))>ar0x_)
+                else:
+                    ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
+
             ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
             # ar0x=ar0.copy()
             # if not sum(abs(arr_rezBzz))==0:

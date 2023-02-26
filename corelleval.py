@@ -237,8 +237,8 @@ except:
 
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning) 
-nnams__=nnams_.copy()
-Nii=len(nnams__)
+#nnams__=nnams_.copy()
+Nii=len(nnams_)
 if __name__ == '__main__': 
     # w = wm.WMI(namespace="OpenHardwareMonitor")
     # temperature_infos = w.Sensor()
@@ -248,16 +248,16 @@ if __name__ == '__main__':
     # del(temperature_infos)
     # del(wm)
     for uuii in range(Nii):
-        nnams_=hkl.load(wrkdir + "name.rlf1")
-        Nii=len(nnams_)
+        #nnams_=hkl.load(wrkdir + "name.rlf1")
+        #Nii=len(nnams_)
         aname=nnams_[uuii]
         ticker=aname+"YLLL"
         ticker1=aname
         ticker2=aname
         try:
             dill.load_session(wrkdir + aname+".ralf")
-            nnams_=hkl.load(wrkdir + "name.rlf1")
-            Nii=len(nnams_)
+            #nnams_=hkl.load(wrkdir + "name.rlf1")
+            #Nii=len(nnams_)
         except:
             ImApp=[]
             try:
@@ -330,8 +330,8 @@ if __name__ == '__main__':
             key=0
             try:
                 dill.load_session(wrkdir + aname+".ralf")
-                nnams_=hkl.load(wrkdir + "name.rlf1")
-                Nii=len(nnams_)
+                #nnams_=hkl.load(wrkdir + "name.rlf1")
+                #Nii=len(nnams_)
             except:    
                 fig = plt.figure()
                 axes = fig.add_axes([0.1, 0.1, 1.2, 1.2])
@@ -446,7 +446,10 @@ if __name__ == '__main__':
                     #     arezAMx_.append(aaa)
                     
                     pool = mp.Pool(processes=Nproc)
-                    pool.map(RALf1FiltrQ, argss)
+                    try:
+                        pool.map(RALf1FiltrQ, argss)
+                    except:
+                        arezAMx_=hkl.load("ralfrez.rlf2")
                     #arezAMx= np.asarray(arezAMx,float)[0,:,:]
                     del(pool)
 
@@ -461,7 +464,8 @@ if __name__ == '__main__':
                     # del(future)                        
                     # del(executor)
                     
-                    arezAMx_=hkl.load("ralfrez.rlf2")
+                    if arezAMx_==[]:
+                        arezAMx_=hkl.load("ralfrez.rlf2")
                     if len(arezAMx_)>0:
                         hkl.dump(arezAMx_,"ralfrez_.rlf2")
                     arezAMx= np.asarray(arezAMx_,float)
@@ -862,9 +866,9 @@ if __name__ == '__main__':
                             all_RezMM[iGr][hhh]=all_RezNM[iGr][hhh].copy()
                         
                         if Lo:
-                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1))[Nf-NNew:]
+                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0_),NNew,1))[Nf-NNew:]
                         else: 
-                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1))[Nf-NNew:]
+                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0_),NNew,1))[Nf-NNew:]
                         if Lo:
                             all_RezMM[iGr][hhh][Nf-NNew:]=all_RezMM[iGr][hhh][Nf-NNew:]
                         else: 
