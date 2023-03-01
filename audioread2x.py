@@ -279,7 +279,10 @@ if __name__ == '__main__':
                 #     arezAMx_.append(aaa)
                 
                 pool = mp.Pool(processes=Nproc)
-                pool.map(RALf1FiltrQ, argss)
+                try:
+                    pool.map(RALf1FiltrQ, argss)
+                except:
+                    arezAMx_=hkl.load("ralfrez.rlf2")
                 #arezAMx= np.asarray(arezAMx,float)[0,:,:]
                 del(pool)
 
@@ -294,7 +297,8 @@ if __name__ == '__main__':
                 # del(future)                        
                 # del(executor)
                 
-                arezAMx_=hkl.load("ralfrez.rlf2")
+                if arezAMx_==[]:
+                    arezAMx_=hkl.load("ralfrez.rlf2")
                 if len(arezAMx_)>0:
                     hkl.dump(arezAMx_,"ralfrez_.rlf2")
                 arezAMx= np.asarray(arezAMx_,float)
@@ -335,10 +339,10 @@ if __name__ == '__main__':
             
             if Lo:
                 ar0x=np.exp(np.median(ZDat,axis=0))  
-                ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
             else:
                 ar0x=np.median(ZDat,axis=0)
-                ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
             for i in range(anI):    
                 if Lo:                                
@@ -347,11 +351,11 @@ if __name__ == '__main__':
                     ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
             if Lo:
                 ar0x=np.exp(np.median(ZDat,axis=0))  
-                ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 #ZDat=np.exp(ZDat)
             else:
                 ar0x=np.median(ZDat,axis=0)
-                ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
+                ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
                 
             for i in range(anI):    
                 if Lo:                                
@@ -475,7 +479,7 @@ if __name__ == '__main__':
                             DD_=np.asarray(DD_,float)                              
                             DD_=(DD_/np.std(DD_))*D
                             DD_=(DD_-np.mean(DD_))
-                            #DD_=DD_*0
+                            DD_=DD_*0
                                                     
                             P=np.zeros(3,float)
                             PP=1
@@ -695,9 +699,9 @@ if __name__ == '__main__':
                         all_RezMM[iGr][hhh]=all_RezNM[iGr][hhh].copy()
                     
                     if Lo:
-                        all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0x),NNew,1))[Nf-NNew:]
+                        all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0_),NNew,1))[Nf-NNew:]
                     else: 
-                        all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0x),NNew,1))[Nf-NNew:]
+                        all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0_),NNew,1))[Nf-NNew:]
                     if Lo:
                         all_RezMM[iGr][hhh][Nf-NNew:]=all_RezMM[iGr][hhh][Nf-NNew:]
                     else: 

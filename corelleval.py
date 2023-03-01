@@ -372,7 +372,7 @@ if __name__ == '__main__':
         #key=13
         while hhh_<aTmStop and not key == 13: 
             Aprocess=[]
-            if hhh==int(NIter/10):
+            if hhh==int(NIter/50):
                 if hhh_<aTmStop-1:
                     try:
                         os.remove(wrkdir + aname+".rlf1")
@@ -506,10 +506,10 @@ if __name__ == '__main__':
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
                 for i in range(anI):    
                     if Lo:                                
@@ -518,11 +518,11 @@ if __name__ == '__main__':
                         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                     #ZDat=np.exp(ZDat)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
+                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
                     
                 for i in range(anI):    
                     if Lo:                                
@@ -646,7 +646,7 @@ if __name__ == '__main__':
                                 DD_=np.asarray(DD_,float)                              
                                 DD_=(DD_/np.std(DD_))*D
                                 DD_=(DD_-np.mean(DD_))
-                                #DD_=DD_*0
+                                DD_=DD_*0
                                                         
                                 P=np.zeros(3,float)
                                 PP=1
