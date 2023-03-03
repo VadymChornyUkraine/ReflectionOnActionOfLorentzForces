@@ -204,6 +204,7 @@ hkl.dump(nnams_,wrkdir + "name_.rlf1")
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning) 
 #nnams__=nnams_.copy()
+nnams_=hkl.load(wrkdir + "name.rlf1")
 Nii=len(nnams_)
 if __name__ == '__main__': 
     # w = wm.WMI(namespace="OpenHardwareMonitor")
@@ -214,17 +215,17 @@ if __name__ == '__main__':
     # del(temperature_infos)
     # del(wm)
     for uuii in range(Nii):
-        #nnams_=hkl.load(wrkdir + "name_.rlf1")
-        #Nii=len(nnams_)
+        nnams_=hkl.load(wrkdir + "name.rlf1")
+        Nii=len(nnams_)
         aname=nnams_[uuii]
+        print(aname)
         ticker=aname+"YLLL"
         ticker1=aname
         ticker2=aname
-
         try:
             dill.load_session(wrkdir + aname+".ralf")
-            #nnams_=hkl.load(wrkdir + "name_.rlf1")
-            #Nii=len(nnams_)
+            nnams_=hkl.load(wrkdir + "name.rlf1")
+            Nii=len(nnams_)
         except:
             ImApp=[]
             try:
@@ -287,17 +288,18 @@ if __name__ == '__main__':
             all_RezNM=np.zeros((Ngroup,NIter,Nf),float)
             all_RezMM=np.zeros((Ngroup,NIter,Nf),float)
             argss=[[0] for j in range(Nproc)]    
-                                
-            Koef_=[]
+    
+            hh0=0
             hhh=0
             hhh_=0
-            key=0
+                    
+            Koef_=[]
             ZZ=0
-            hh0=0
+            key=0
             try:
                 dill.load_session(wrkdir + aname+".ralf")
-                #nnams_=hkl.load(wrkdir + "name_.rlf1")
-                #Nii=len(nnams_)
+                nnams_=hkl.load(wrkdir + "name.rlf1")
+                Nii=len(nnams_)
             except:    
                 fig = plt.figure()
                 axes = fig.add_axes([0.1, 0.1, 1.2, 1.2])
@@ -338,7 +340,7 @@ if __name__ == '__main__':
         #key=13
         while hhh_<aTmStop and not key == 13: 
             Aprocess=[]
-            if hhh==int(NIter/10):
+            if hhh==int(NIter/20):
                 if hhh_<aTmStop-1:
                     try:
                         os.remove(wrkdir + aname+".rlf1")

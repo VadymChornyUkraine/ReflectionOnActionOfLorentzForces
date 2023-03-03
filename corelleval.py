@@ -238,6 +238,7 @@ except:
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning) 
 #nnams__=nnams_.copy()
+nnams_=hkl.load(wrkdir + "name.rlf1")
 Nii=len(nnams_)
 if __name__ == '__main__': 
     # w = wm.WMI(namespace="OpenHardwareMonitor")
@@ -248,16 +249,17 @@ if __name__ == '__main__':
     # del(temperature_infos)
     # del(wm)
     for uuii in range(Nii):
-        #nnams_=hkl.load(wrkdir + "name.rlf1")
-        #Nii=len(nnams_)
+        nnams_=hkl.load(wrkdir + "name.rlf1")
+        Nii=len(nnams_)
         aname=nnams_[uuii]
+        print(aname)
         ticker=aname+"YLLL"
         ticker1=aname
         ticker2=aname
         try:
             dill.load_session(wrkdir + aname+".ralf")
-            #nnams_=hkl.load(wrkdir + "name.rlf1")
-            #Nii=len(nnams_)
+            nnams_=hkl.load(wrkdir + "name.rlf1")
+            Nii=len(nnams_)
         except:
             ImApp=[]
             try:
@@ -330,8 +332,8 @@ if __name__ == '__main__':
             key=0
             try:
                 dill.load_session(wrkdir + aname+".ralf")
-                #nnams_=hkl.load(wrkdir + "name.rlf1")
-                #Nii=len(nnams_)
+                nnams_=hkl.load(wrkdir + "name.rlf1")
+                Nii=len(nnams_)
             except:    
                 fig = plt.figure()
                 axes = fig.add_axes([0.1, 0.1, 1.2, 1.2])
@@ -372,7 +374,7 @@ if __name__ == '__main__':
         #key=13
         while hhh_<aTmStop and not key == 13: 
             Aprocess=[]
-            if hhh==int(NIter/50):
+            if hhh==int(NIter/20):
                 if hhh_<aTmStop-1:
                     try:
                         os.remove(wrkdir + aname+".rlf1")
