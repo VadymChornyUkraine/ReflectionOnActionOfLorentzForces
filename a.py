@@ -4,8 +4,8 @@ arrrxx=hkl.load("ralfrez.rlf2")
 dNIt=8
 Ngroup=3
 Nproc=2*Ngroup#*(os.cpu_count())
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX10/"
-[hhha,Arr_AAA]=(hkl.load(wrkdir + "pi"+".rlf1"))
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX9/"
+[hhha,Arr_AAA]=(hkl.load(wrkdir + "BNT-USD_"+".rlf1"))
 NIter=100
 
 for iGr in range(Ngroup):  

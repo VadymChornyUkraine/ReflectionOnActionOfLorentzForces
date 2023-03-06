@@ -159,7 +159,7 @@ except:
 "ETC-USD", 
 "ATOM-USD", 
 "EOS-USD", 
-"AVE-USD", 
+"AAVE-USD", 
 "GRT1-USD", 
 "XTZ-USD", 
 "MKR-USD", 
@@ -374,7 +374,7 @@ if __name__ == '__main__':
         #key=13
         while hhh_<aTmStop and not key == 13: 
             Aprocess=[]
-            if hhh==int(NIter/20):
+            if hhh==int(NIter/33):
                 if hhh_<aTmStop-1:
                     try:
                         os.remove(wrkdir + aname+".rlf1")
@@ -492,7 +492,7 @@ if __name__ == '__main__':
                 aMM=3
 
                 for iGr in range(Ngroup):  
-                    ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(0))*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhha)*int(Nproc/Ngroup)].copy()
+                    ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
                     if iGr==0:
                         xxxx=ZDat.copy()
                     else:
@@ -508,10 +508,10 @@ if __name__ == '__main__':
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
                 for i in range(anI):    
                     if Lo:                                
@@ -520,11 +520,11 @@ if __name__ == '__main__':
                         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=1.2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                     #ZDat=np.exp(ZDat)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
+                    ar0x_=1.2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
                     
                 for i in range(anI):    
                     if Lo:                                
@@ -598,15 +598,15 @@ if __name__ == '__main__':
                                     ZDat[i]=(np.log(ZDat[i])+KPP*np.log(arr_rezBzz))/(1+KPP)
                                 else:
                                     ZDat[i]=(ZDat[i]+KPP*arr_rezBzz)/(1+KPP)
-                        P=np.zeros(3,float)
-                        for i in range(anI):
-                            dd=ZDat[i][Nf-NNew:].copy()
-                            if Lo:
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
-                            else:
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
-                            P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
-                            ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0] 
+                        # P=np.zeros(3,float)
+                        # for i in range(anI):
+                        #     dd=ZDat[i][Nf-NNew:].copy()
+                        #     if Lo:
+                        #         ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
+                        #     else:
+                        #         ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
+                        #     P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
+                        #     ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0] 
                         
                         if anI<aNN: 
                             all_RezM[iGr][hhh]=np.amax(ZDat,axis=0)
@@ -648,7 +648,7 @@ if __name__ == '__main__':
                                 DD_=np.asarray(DD_,float)                              
                                 DD_=(DD_/np.std(DD_))*D
                                 DD_=(DD_-np.mean(DD_))
-                                DD_=DD_*0
+                                #DD_=DD_*0
                                                         
                                 P=np.zeros(3,float)
                                 PP=1
@@ -867,10 +867,10 @@ if __name__ == '__main__':
                         else:
                             all_RezMM[iGr][hhh]=all_RezNM[iGr][hhh].copy()
                         
-                        if Lo:
-                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0_),NNew,1))[Nf-NNew:]
-                        else: 
-                            all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0_),NNew,1))[Nf-NNew:]
+                        # if Lo:
+                        #     all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),np.log(ar0_),NNew,1))[Nf-NNew:]
+                        # else: 
+                        #     all_RezMM[iGr][hhh][Nf-NNew:]=(filterFourierQ((all_RezMM[iGr][hhh]),(ar0_),NNew,1))[Nf-NNew:]
                         if Lo:
                             all_RezMM[iGr][hhh][Nf-NNew:]=all_RezMM[iGr][hhh][Nf-NNew:]
                         else: 
