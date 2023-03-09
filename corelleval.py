@@ -508,29 +508,29 @@ if __name__ == '__main__':
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=1.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                    ar0x_=1.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
                 for i in range(anI):    
                     if Lo:                                
                         ZDat[i]=(ZDat[i]*(abs(ZDat[i]-np.log(ar0x))<=ar0x_))+np.log(ar0x)*(abs(ZDat[i]-np.log(ar0x))>ar0x_)
                     else:
                         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
-                if Lo:
-                    ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=2*np.median(abs(ZDat-np.log(ar0x)),axis=0)
-                    #ZDat=np.exp(ZDat)
-                else:
-                    ar0x=np.median(ZDat,axis=0)
-                    ar0x_=2*(np.median(abs((ZDat)-(ar0x)),axis=0))  
+                # if Lo:
+                #     ar0x=np.exp(np.median(ZDat,axis=0))  
+                #     ar0x_=1.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                #     #ZDat=np.exp(ZDat)
+                # else:
+                #     ar0x=np.median(ZDat,axis=0)
+                #     ar0x_=1.4*(np.median(abs((ZDat)-(ar0x)),axis=0))  
                     
-                for i in range(anI):    
-                    if Lo:                                
-                        ZDat[i]=(ZDat[i]*(abs(ZDat[i]-np.log(ar0x))<=ar0x_))+np.log(ar0x)*(abs(ZDat[i]-np.log(ar0x))>ar0x_)
-                    else:
-                        ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
+                # for i in range(anI):    
+                #     if Lo:                                
+                #         ZDat[i]=(ZDat[i]*(abs(ZDat[i]-np.log(ar0x))<=ar0x_))+np.log(ar0x)*(abs(ZDat[i]-np.log(ar0x))>ar0x_)
+                #     else:
+                #         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
 
                 ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
