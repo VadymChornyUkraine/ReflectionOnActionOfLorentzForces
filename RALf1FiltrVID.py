@@ -122,7 +122,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
                    
         aaa=np.fft.ifft(farxxx).real
         arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=(aaa[Nnl:0:-1]-2*((key<0)-.5)*aaa[2*Nnl:Nnl-1:-1])/2
-        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]= savgol_filter(arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l], 20, 5)
+        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]= savgol_filter(arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l], 14, 5)
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
     gg=gg/NChan   
@@ -439,8 +439,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
                         dd1_x.append(dd1)
                         dd2_x.append(dd2)
-                        dd1=np.amax(dd1_x,axis=0)
-                        dd2=np.amin(dd2_x,axis=0)
+                        dd1=np.mean(dd1_x,axis=0)
+                        dd2=np.mean(dd2_x,axis=0)
                         sr2_1=[]
                         sr2_2=[]
                         sarr_c=[]
