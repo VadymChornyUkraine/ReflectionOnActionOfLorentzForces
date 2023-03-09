@@ -122,7 +122,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
                    
         aaa=np.fft.ifft(farxxx).real
         arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=(aaa[Nnl:0:-1]-2*((key<0)-.5)*aaa[2*Nnl:Nnl-1:-1])/2
-        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]= savgol_filter(arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l], 40, 5)
+        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]= savgol_filter(arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l], 20, 5)
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
     gg=gg/NChan   
