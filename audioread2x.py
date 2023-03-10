@@ -433,9 +433,9 @@ if __name__ == '__main__':
                     for i in range(anI):
                         dd=ZDat[i][Nf-NNew:].copy()
                         if Lo:
-                            ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
+                            ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1,-2)[Nf-NNew:]
                         else:
-                            ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
+                            ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1,-2)[Nf-NNew:]
                         P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
                         ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0] 
                     

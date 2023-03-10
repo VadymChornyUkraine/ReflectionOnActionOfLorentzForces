@@ -24,7 +24,7 @@ import RALF1FilterX as XFilter
 
 MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX9/"
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX11/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -33,7 +33,7 @@ interv="Daily"
 #INTRADAY
 #d_intervals = {"1min","5min","15min","30min","60min"}
 
-Lengt0=400
+Lengt0=700
 Ngroup=3
 Nproc=2*Ngroup#*(os.cpu_count())
 Lo=1  
@@ -43,7 +43,7 @@ NIt=3
 NIter=100
 DT=0.3
 dNIt=4
-aDecm=1
+aDecm=2
 KPP=0
 
 aKEY=0
@@ -374,7 +374,7 @@ if __name__ == '__main__':
         #key=13
         while hhh_<aTmStop and not key == 13: 
             Aprocess=[]
-            if hhh==int(NIter/33):
+            if hhh==int(NIter/20):
                 if hhh_<aTmStop-1:
                     try:
                         os.remove(wrkdir + aname+".rlf1")
@@ -602,9 +602,9 @@ if __name__ == '__main__':
                         for i in range(anI):
                             dd=ZDat[i][Nf-NNew:].copy()
                             if Lo:
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
+                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1,-2)[Nf-NNew:]
                             else:
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
+                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1,-2)[Nf-NNew:]
                             P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
                             ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0] 
                         

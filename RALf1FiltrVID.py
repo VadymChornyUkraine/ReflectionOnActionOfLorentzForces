@@ -113,9 +113,9 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
                 #farxxx[j]=(farxx[j]/mfarxx[j])*farx[j]
                        
         farxxx[0]=0*farxx[0]   
-        #if not key<0:
-        # farxxx[1]=farxxx[1]*0
-        # farxxx[2*Nnl-1]=farxxx[2*Nnl-1]*0 
+        if not key==-1:
+            farxxx[1]=farxxx[1]*0
+            farxxx[2*Nnl-1]=farxxx[2*Nnl-1]*0 
         # if key<0:
         #     farxxx[2]=farxxx[2]*0
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
@@ -493,7 +493,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             # asr1=abs(dd1-dd0)>abs(dd2-dd0)
                             # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
                             # rr2[hh]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
-                            rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan))/hh 
+                            rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,-2))/hh 
                             sr2=[]
                             sarr_c=[]
                             for l in range(NChan):  
