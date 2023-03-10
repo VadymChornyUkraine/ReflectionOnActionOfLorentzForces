@@ -493,7 +493,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             # asr1=abs(dd1-dd0)>abs(dd2-dd0)
                             # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
                             # rr2[hh]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
-                            rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,-2))/hh 
+                            rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,-2+1*(hh==Nhh)))/hh 
                             sr2=[]
                             sarr_c=[]
                             for l in range(NChan):  
