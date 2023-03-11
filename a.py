@@ -3,9 +3,10 @@ import numpy as np
 arrrxx=hkl.load("ralfrez.rlf2")
 dNIt=8
 Ngroup=3
+Lo=1
 Nproc=2*Ngroup#*(os.cpu_count())
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX9/"
-[hhha,Arr_AAA]=(hkl.load(wrkdir + "BNT-USD_"+".rlf1"))
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX11/"
+[hhha,Arr_AAA]=(hkl.load(wrkdir + "ETH-USD"+".rlf1"))
 NIter=100
 
 for iGr in range(Ngroup):  
@@ -15,9 +16,29 @@ for iGr in range(Ngroup):
     else:
         xxxx=np.concatenate((xxxx, ZDat))
 ZDat=xxxx.copy()        
+
+anI=len(ZDat)
+# for i in range(anI):  
+#     if Lo:
+#         ZDat[i][:len(ar0)]=np.log(ar0)
+#     else:
+#         ZDat[i][:len(ar0)]=ar0.copy()
+
+if Lo:
+    ar0x=np.exp(np.median(ZDat,axis=0))  
+    ar0x_=1.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+else:
+    ar0x=np.median(ZDat,axis=0)
+    ar0x_=1.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
+    
+for i in range(anI):    
+    if Lo:                                
+        ZDat[i]=(ZDat[i]*(abs(ZDat[i]-np.log(ar0x))<=ar0x_))+np.log(ar0x)*(abs(ZDat[i]-np.log(ar0x))>ar0x_)
+    else:
+        ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
+
 #ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hhh+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
-aaaaa=ZDat[:,:].transpose().copy()
-bbbbb=np.median(aaaaa.transpose(),axis=0)
+bbbbb=ZDat[:,:].transpose().copy()
+aaaaa=np.median(bbbbb.transpose(),axis=0)
 #%varexp --plot aaaaa
-#filterFourierQ(aaaaa[:,0],aaaaa[:,0],50,1,1)
 
