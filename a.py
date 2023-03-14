@@ -6,7 +6,7 @@ Ngroup=3
 Lo=1
 Nproc=2*Ngroup#*(os.cpu_count())
 wrkdir = r"/home/vacho/Документи/Work/W14_7/WX11/"
-[hhha,Arr_AAA]=(hkl.load(wrkdir + "ETH-USD"+".rlf1"))
+[hhha,Arr_AAA]=(hkl.load(wrkdir + "ATOM-USD"+".rlf1"))
 NIter=100
 
 for iGr in range(Ngroup):  
@@ -40,5 +40,5 @@ for i in range(anI):
 #ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hhh+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
 bbbbb=ZDat[:,:].transpose().copy()
 aaaaa=np.median(bbbbb.transpose(),axis=0)
-#%varexp --plot aaaaa
+%varexp --plot bbbbb
 
