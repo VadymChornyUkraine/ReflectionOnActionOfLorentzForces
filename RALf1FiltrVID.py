@@ -88,8 +88,9 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         for i in range(az):
             ar_=arb[Nfl-(az-i)*Nnl+Nfl*l:Nfl+Nnl-(az-i)*Nnl+Nfl*l].copy()
             gg0=gg0+np.sum(ar_*ar_)
-            #ar_=ar_-ar_[len(ar_)-1]
-            ar_=ar_-np.mean(ar_)
+            #ar_=ar_[::-1].copy()
+            ar_=ar_-ar_[len(ar_)-1]
+            #ar_=ar_-np.mean(ar_)
             ar_x=ar_[::-1].copy()
             ar__=abs(np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_x)))) 
             farx=np.maximum(farx,ar__)
@@ -99,8 +100,10 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
     arxr=arxx.copy()
     for l in range(NChan):      
         ar_=arxx[Nfl_*(l+1)-Nnl:Nfl_*(l+1)].copy()
-        #ar_=ar_-ar_[0]
-        ar_=ar_-np.mean(ar_)
+        ar_=ar_-ar_[0]
+        ar_=ar_[::-1].copy()
+        ar_=ar_-ar_[len(ar_)-1]
+        #ar_=ar_-np.mean(ar_)
         ar_x=ar_[::-1].copy()
         farxx=np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_x)))    
         mfarxx=np.abs(farxx)+1e-32  
@@ -122,7 +125,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
                    
         aaa=np.fft.ifft(farxxx).real
-        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=(aaa[0:Nnl]-2*((key<0)-.5)*aaa[2*Nnl:Nnl-1:-1])/2
+        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=((aaa[0:Nnl]-2*((key<0)-.5)*aaa[2*Nnl:Nnl-1:-1])/2)[::-1]
         arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]= savgol_filter(arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l], 14, 5)
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
