@@ -100,7 +100,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
     arxr=arxx.copy()
     for l in range(NChan):      
         ar_=arxx[Nfl_*(l+1)-Nnl:Nfl_*(l+1)].copy()
-        ar_=ar_-ar_[0]
+        #ar_=ar_-ar_[0]
         ar_=ar_[::-1].copy()
         ar_=ar_-ar_[len(ar_)-1]
         #ar_=ar_-np.mean(ar_)
