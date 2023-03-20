@@ -24,7 +24,7 @@ import RALF1FilterX as XFilter
 
 MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX11/"
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX12/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -129,7 +129,7 @@ def loaddata(aLengt,ticker1,key):
                     dat.append(row[2])
                 i=i+1
         dat=dat[len(dat)-aLengt+2*aDecm:]
-        dat=dat[:len(dat)]
+        dat=dat[:len(dat)-1]
         try:
             dat=np.asarray(dat,float)
             arrr=np.asarray(dat,float)
@@ -144,12 +144,12 @@ try:
     ii=len(nnams_)
 except:
     WhO=[
-"BTC-USD", 
-"ETH-USD", 
-"ADA-USD", 
-"SOL-USD", 
-"DOGE-USD", 
-"UNI1-USD", 
+# "BTC-USD", 
+# "ETH-USD", 
+# "ADA-USD", 
+# "SOL-USD", 
+# "DOGE-USD", 
+# "UNI1-USD", 
 "LINK-USD", 
 "BCH-USD", 
 "LTC-USD", 
@@ -854,16 +854,16 @@ if __name__ == '__main__':
                         P_2[0]=np.std(y_2)/np.std(x)
                         P_2[1]=np.mean(y_2)-P_2[0]*np.mean(x)
                         
-                        # dd1=(arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
-                        # dd2=(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0]
+                        dd1=(arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                        dd2=(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0]
                     
-                        # dd0=(dd1+dd2)/2
-                        # asr1=abs(dd1-dd0)>abs(dd2-dd0)
-                        # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
-                        #all_RezNM[iGr][hhh][Nf-NNew:]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
+                        dd0=(dd1+dd2)/2
+                        asr1=abs(dd1-dd0)>abs(dd2-dd0)
+                        asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
+                        all_RezNM[iGr][hhh][Nf-NNew:]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
    
-                        all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
-                                                            +(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0])
+                        # all_RezNM[iGr][hhh][Nf-NNew:]=0.5*((arr_RezM[iGr][Nf-NNew:]-P_1[1])/P_1[0]
+                        #                                     +(arr_RezN[iGr][Nf-NNew:]-P_2[1])/P_2[0])
                             
                         if not astart0==np.Inf:
                             all_RezMM[iGr][hhh]=np.cumsum(all_RezNM[iGr][hhh])
