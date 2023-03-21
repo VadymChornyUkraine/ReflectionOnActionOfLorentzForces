@@ -5,8 +5,8 @@ dNIt=8
 Ngroup=3
 Lo=1
 Nproc=2*Ngroup#*(os.cpu_count())
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX11/"
-[hhha,Arr_AAA]=(hkl.load(wrkdir + "ATOM-USD"+".rlf1"))
+wrkdir = r"/home/vacho/Документи/Work/W14_7/WX12/"
+[hhha,Arr_AAA]=(hkl.load(wrkdir + "BTC-USD"+".rlf1"))
 NIter=100
 
 for iGr in range(Ngroup):  
