@@ -144,8 +144,8 @@ try:
     ii=len(nnams_)
 except:
     WhO=[
-  "BTC-USD", 
-  "ETH-USD", 
+    "BTC-USD", 
+    "ETH-USD", 
   "ADA-USD", 
 "SOL-USD", 
 "DOGE-USD", 
