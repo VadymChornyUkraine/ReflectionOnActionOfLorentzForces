@@ -1,12 +1,22 @@
 import hickle as hkl
 import numpy as np
 arrrxx=hkl.load("ralfrez.rlf2")
+# i=0 
+# arrrxx_=[]
+# for ii in arrrxx:
+#     if i>0:
+#         arrrxx_.append(ii)
+#     i=i+1
+# hkl.dump(arrrxx_,"ralfrez.rlf2")
+bbb=np.asarray(arrrxx,float).transpose()
+%varexp --plot bbb
+
 dNIt=8
 Ngroup=3
 Lo=1
 Nproc=2*Ngroup#*(os.cpu_count())
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX12/"
-[hhha,Arr_AAA]=(hkl.load(wrkdir + "BTC-USD"+".rlf1"))
+wrkdir = r"c:/work/WX13/"
+[hhha,Arr_AAA]=(hkl.load(wrkdir + "ADA-USD"+".rlf1"))
 NIter=100
 
 for iGr in range(Ngroup):  

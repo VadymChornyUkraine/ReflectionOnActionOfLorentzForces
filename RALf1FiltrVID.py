@@ -12,7 +12,7 @@ from random import sample
 import hickle as hkl
 from scipy.signal import savgol_filter
 MaxTemp=82
-
+ 
 
 def CheckTemp(aTemp=MaxTemp):
     # w = wmi.WMI(namespace="OpenHardwareMonitor")
@@ -312,8 +312,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             seqA=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqA)),float) 
                             seqA=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqA)),float)
 
-                            dQ4_A= np.asarray( XFilter.RALF1FilterX( (dQ4)*(1-seqA_)+seqA_*( dQ4-(mDD4_A)),len(dQ4),len(dQ4[0]),1,0)+seqA_*((mDD4_)),np.float16)
-                            dQ4_B=-np.asarray( XFilter.RALF1FilterX(-(dQ4)*(1-seqA_)+seqA_*(-dQ4-(mDD4_B)),len(dQ4),len(dQ4[0]),1,0)+seqA_*((mDD4_)),np.float16)
+                            dQ4_A= np.asarray(  XFilter.RALF1FilterX( (dQ4)-seqA_*((mDD4_A)),len(dQ4),len(dQ4[0]),1,0)+seqA_*((mDD4_A)),np.float16)
+                            dQ4_B= np.asarray( -XFilter.RALF1FilterX(-(dQ4)-seqA_*((mDD4_B)),len(dQ4),len(dQ4[0]),1,0)-seqA_*((mDD4_B)),np.float16)
                          
                             #dQ4=dQ4_B*(dQ4_B>0)*((dQ4_A+dQ4_B)>0)+dQ4_A*(dQ4_A<0)*((dQ4_A+dQ4_B)<0)#                      
                             dQ4=(dQ4_A+dQ4_B)/2

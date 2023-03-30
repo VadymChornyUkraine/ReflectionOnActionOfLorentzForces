@@ -24,7 +24,7 @@ import RALF1FilterX as XFilter
 
 MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"/home/vacho/Документи/Work/W14_7/WX12/"
+wrkdir = r"c:/Work/WX13/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -144,6 +144,7 @@ try:
     ii=len(nnams_)
 except:
     WhO=[
+        "ADA-USD", 
     "BTC-USD", 
     "ETH-USD", 
   "ADA-USD", 
@@ -648,7 +649,7 @@ if __name__ == '__main__':
                                 DD_=np.asarray(DD_,float)                              
                                 DD_=(DD_/np.std(DD_))*D
                                 DD_=(DD_-np.mean(DD_))
-                                DD_=DD_*0
+                                #DD_=DD_*0
                                                         
                                 P=np.zeros(3,float)
                                 PP=1
@@ -676,8 +677,8 @@ if __name__ == '__main__':
                                         DD__A=DD_[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)].copy()
                                         DD__B=-DD__A[:,::-1].copy()
                                         if len(dd1)>1 and len(dd1[0])>=len(dd1):
-                                            eeA= (XFilter.RALF1FilterX( dd1*(1-seqA_)+seqA_*( dd1-(DD__A)),len(dd1),len(dd1[0]),1,0))
-                                            eeB=-(XFilter.RALF1FilterX(-dd1*(1-seqA_)+seqA_*(-dd1-(DD__B)),len(dd1),len(dd1[0]),1,0))
+                                            eeA= (XFilter.RALF1FilterX( dd1-seqA_*((DD__A)),len(dd1),len(dd1[0]),1,0))+seqA_*((DD__A))
+                                            eeB=-(XFilter.RALF1FilterX(-dd1-seqA_*((DD__B)),len(dd1),len(dd1[0]),1,0))-seqA_*((DD__B))
                                             dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeB>0)*((eeA+eeB)>0)
                                             dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeA<0)*((eeA+eeB)<0)
                                       
@@ -692,8 +693,8 @@ if __name__ == '__main__':
                                                 dd_CC[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=(dd2.copy()-P[1])/P[0] 
                                             else:
                                                 if len(dd1)>1 and len(dd1[0])>=len(dd1):
-                                                    eeA= (XFilter.RALF1FilterX( dd1*(1-seqA_)+seqA_*( dd1-(DD__B)),len(dd1),len(dd1[0]),1,0))
-                                                    eeB=-(XFilter.RALF1FilterX(-dd1*(1-seqA_)+seqA_*(-dd1-(DD__A)),len(dd1),len(dd1[0]),1,0))
+                                                    eeA= (XFilter.RALF1FilterX( dd1-seqA_*((DD__A)),len(dd1),len(dd1[0]),1,0))+seqA_*((DD__A))
+                                                    eeB=-(XFilter.RALF1FilterX(-dd1-seqA_*((DD__B)),len(dd1),len(dd1[0]),1,0))-seqA_*((DD__B))
                                                     dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeB>0)*((eeA+eeB)>0)
                                                     dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeA<0)*((eeA+eeB)<0)
                                               
