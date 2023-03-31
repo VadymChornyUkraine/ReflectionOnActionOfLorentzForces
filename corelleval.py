@@ -144,7 +144,7 @@ try:
     ii=len(nnams_)
 except:
     WhO=[
-        "ADA-USD", 
+#        "ADA-USD", 
     "BTC-USD", 
     "ETH-USD", 
   "ADA-USD", 
@@ -645,11 +645,12 @@ if __name__ == '__main__':
                                 ss4_=np.concatenate((aa, aa, aa))                                      
                                 DD_=[]
                                 for hhhc in range(anI):
-                                    DD_.append(ss4_[hhhc+Nf:hhhc:-1].copy())
+                                    vvv=ss4_[hhhc:hhhc+Nf].copy()
+                                    DD_.append(vvv[::-1].copy())
                                 DD_=np.asarray(DD_,float)                              
                                 DD_=(DD_/np.std(DD_))*D
                                 DD_=(DD_-np.mean(DD_))
-                                DD_=DD_*0
+                                #DD_=DD_*0
                                                         
                                 P=np.zeros(3,float)
                                 PP=1

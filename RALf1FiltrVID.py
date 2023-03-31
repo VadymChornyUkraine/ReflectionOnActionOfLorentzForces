@@ -294,11 +294,12 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                         P=np.zeros(3,float)
                         
                         for ll in range(NCh0):
-                            mDD4_A[:,ll]=r5[rR[ss4[ll]+zz]:rR[ss4[ll]+zz]+NCh].copy()
-                            mDD4_B[:,ll]=r5[rR[ss4[ll]+zz]+NCh:rR[ss4[ll]+zz]:-1].copy()
+                            vvv=r5[rR[ss4[ll]+zz]:rR[ss4[ll]+zz]+NCh].copy()
+                            mDD4_A[:,ll]=vvv.copy()
+                            mDD4_B[:,ll]=-vvv[::-1].copy()
                        
-                        mDD4_A=mDD4_A-np.mean(mDD4_A)
-                        mDD4_B=mDD4_B-np.mean(mDD4_B)
+                        mDD4_A=(mDD4_A-np.mean(mDD4_A))#*0
+                        mDD4_B=(mDD4_B-np.mean(mDD4_B))#*0
                         
                         nNxA=sum(sum(mDD4==1))     
                         nNxA_=sum(sum(mDD4==0))  

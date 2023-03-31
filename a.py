@@ -1,22 +1,23 @@
 import hickle as hkl
 import numpy as np
-# arrrxx=hkl.load("ralfrez.rlf2")
-# # i=0 
-# # arrrxx_=[]
-# # for ii in arrrxx:
-# #     if i>0:
-# #         arrrxx_.append(ii)
-# #     i=i+1
-# # hkl.dump(arrrxx_,"ralfrez.rlf2")
-# bbb=np.asarray(arrrxx,float).transpose()
-# %varexp --plot bbb
+arrrxx=hkl.load("ralfrez.rlf2")
+# i=0 
+# arrrxx_=[]
+# for ii in arrrxx:
+#     if i>0:
+#         arrrxx_.append(ii)
+#     i=i+1
+# hkl.dump(arrrxx_,"ralfrez.rlf2")
+bbb=np.asarray(arrrxx,float).transpose()
+%varexp --plot bbb
+len(arrrxx)
 
 dNIt=8
 Ngroup=3
 Lo=1
 Nproc=2*Ngroup#*(os.cpu_count())
 wrkdir = r"c:/work/WX13/"
-[hhha,Arr_AAA]=(hkl.load(wrkdir + "ADA-USD"+".rlf1"))
+[hhha,Arr_AAA]=(hkl.load(wrkdir + "BTC-USD"+".rlf1"))
 NIter=100
 
 for iGr in range(Ngroup):  
@@ -36,10 +37,10 @@ anI=len(ZDat)
 
 if Lo:
     ar0x=np.exp(np.median(ZDat,axis=0))  
-    ar0x_=.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+    ar0x_=1.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
 else:
     ar0x=np.median(ZDat,axis=0)
-    ar0x_=.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
+    ar0x_=1.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
     
 for i in range(anI):    
     if Lo:                                
