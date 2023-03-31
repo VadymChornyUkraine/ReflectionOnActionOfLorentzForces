@@ -649,7 +649,7 @@ if __name__ == '__main__':
                                 DD_=np.asarray(DD_,float)                              
                                 DD_=(DD_/np.std(DD_))*D
                                 DD_=(DD_-np.mean(DD_))
-                                #DD_=DD_*0
+                                DD_=DD_*0
                                                         
                                 P=np.zeros(3,float)
                                 PP=1
