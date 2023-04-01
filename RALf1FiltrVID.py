@@ -90,7 +90,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
             gg0=gg0+np.sum(ar_*ar_)
             #ar_=ar_[::-1].copy()
             ar_=ar_-ar_[len(ar_)-1]
-            ar_=ar_-np.mean(ar_)
+            #ar_=ar_-np.mean(ar_)
             ar_x=ar_[::-1].copy()
             ar__=abs(np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_x)))) 
             farx=np.maximum(farx,ar__)
@@ -104,7 +104,7 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         #ar_=ar_-ar_[0]
         ar_=ar_[::-1].copy()
         ar_=ar_-ar_[len(ar_)-1]
-        ar_=ar_-np.mean(ar_)
+        #ar_=ar_-np.mean(ar_)
         ar_x=ar_[::-1].copy()
         farxx=np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_x)))    
         mfarxx=np.abs(farxx)+1e-32  
@@ -296,7 +296,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                         for ll in range(NCh0):
                             vvv=r5[rR[ss4[ll]+zz]:rR[ss4[ll]+zz]+NCh].copy()
                             mDD4_A[:,ll]=vvv.copy()
-                            mDD4_B[:,ll]=-vvv[::-1].copy()
+                            mDD4_B[:,ll]=vvv.copy()#-vvv[::-1].copy()
                        
                         mDD4_A=(mDD4_A-np.mean(mDD4_A))#*0
                         mDD4_B=(mDD4_B-np.mean(mDD4_B))#*0

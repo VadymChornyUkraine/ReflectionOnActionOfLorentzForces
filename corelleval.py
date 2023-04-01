@@ -676,7 +676,7 @@ if __name__ == '__main__':
                                         seqA=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqA)),float)    
                                         
                                         DD__A=DD_[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)].copy()
-                                        DD__B=-DD__A[:,::-1].copy()
+                                        DD__B=DD__A.copy()#-DD__A[:,::-1].copy()
                                         if len(dd1)>1 and len(dd1[0])>=len(dd1):
                                             eeA= (XFilter.RALF1FilterX( dd1-seqA_*((DD__A)),len(dd1),len(dd1[0]),1,0))+seqA_*((DD__A))
                                             eeB=-(XFilter.RALF1FilterX(-dd1-seqA_*((DD__B)),len(dd1),len(dd1[0]),1,0))-seqA_*((DD__B))
