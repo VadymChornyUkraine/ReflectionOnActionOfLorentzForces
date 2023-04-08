@@ -24,7 +24,7 @@ import RALF1FilterX as XFilter
 
 MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"c:/Work/WX13/"
+wrkdir = r"c:/Work/WX15/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -144,7 +144,7 @@ try:
     ii=len(nnams_)
 except:
     WhO=[
-#        "ADA-USD", 
+        "ADA-USD", 
     "BTC-USD", 
     "ETH-USD", 
   "ADA-USD", 
@@ -601,13 +601,17 @@ if __name__ == '__main__':
                                     ZDat[i]=(ZDat[i]+KPP*arr_rezBzz)/(1+KPP)
                         P=np.zeros(3,float)
                         for i in range(anI):
-                            dd=ZDat[i][Nf-NNew:].copy()
+                            dd=ZDat[i][Nf-NNew:].copy()                         
                             if Lo:
+                                x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
                                 ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1,-2)[Nf-NNew:]
                             else:
+                                x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
                                 ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1,-2)[Nf-NNew:]
-                            P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
-                            ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0] 
+                            P[0:2]=np.polyfit(x,ZDat[i][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))],1)
+                            if not P[0]>0:
+                                P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
+                            ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0]     
                         
                         if anI<aNN: 
                             all_RezM[iGr][hhh]=np.amax(ZDat,axis=0)
@@ -677,42 +681,33 @@ if __name__ == '__main__':
                                         
                                         DD__A=DD_[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)].copy()
                                         DD__B=DD__A.copy()#-DD__A[:,::-1].copy()
+                                        DD__A=DD__A*(DD__A>0)
+                                        DD__B=DD__B*(DD__B>0)
+                                        
                                         if len(dd1)>1 and len(dd1[0])>=len(dd1):
-                                            eeA= (XFilter.RALF1FilterX( dd1-seqA_*((DD__A)),len(dd1),len(dd1[0]),1,0))+seqA_*((DD__A))
-                                            eeB=-(XFilter.RALF1FilterX(-dd1-seqA_*((DD__B)),len(dd1),len(dd1[0]),1,0))-seqA_*((DD__B))
+                                            eeA= (XFilter.RALF1FilterX( dd1+seqA_*((DD__A)),len(dd1),len(dd1[0]),1,0))-seqA_*((DD__A))
+                                            eeB=-(XFilter.RALF1FilterX(-dd1+seqA_*((DD__B)),len(dd1),len(dd1[0]),1,0))+seqA_*((DD__B))
                                             dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeB>0)*((eeA+eeB)>0)
                                             dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeA<0)*((eeA+eeB)<0)
                                       
-                                        dd2=0.5*(dd_AA+dd_BB)[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]
-                                        seqB=(dd2.reshape(len(dd2)*len(dd2[0])))[1:]*np.ceil(0.5*(1/(mdd4_.reshape(len(dd2)*len(dd2[0]))==1)[0:len(dd2)*len(dd2[0])-1]+1/(mdd4_.reshape(len(dd2)*len(dd2[0]))==1)[1:]))
+                                        dd2_1=(dd_AA)[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]
+                                        seqB=(dd2_1.reshape(len(dd2_1)*len(dd2_1[0])))[1:]*np.ceil(0.5*(1/(mdd4_.reshape(len(dd2_1)*len(dd2_1[0]))==1)[0:len(dd2_1)*len(dd2_1[0])-1]+1/(mdd4_.reshape(len(dd2_1)*len(dd2_1[0]))==1)[1:]))
                                         seqB=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqB)),float) 
                                         seqB=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqB)),float)    
+                                        dd2_2=(dd_BB)[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]
+                                        seqC=(dd2_2.reshape(len(dd2_2)*len(dd2_2[0])))[1:]*np.ceil(0.5*(1/(mdd4_.reshape(len(dd2_2)*len(dd2_2[0]))==1)[0:len(dd2_2)*len(dd2_2[0])-1]+1/(mdd4_.reshape(len(dd2_2)*len(dd2_2[0]))==1)[1:]))
+                                        seqC=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqC)),float) 
+                                        seqC=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqC)),float)    
 
                                         try:
-                                            P[0:2]=np.polyfit(seqA,seqB,1)
-                                            if not abs(P[0]-1)>0.5 and 100*scp.pearsonr(seqA,seqB)[0]>50:
-                                                dd_CC[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=(dd2.copy()-P[1])/P[0] 
+                                            P_1=P.copy()
+                                            P_2=P.copy()
+                                            P_1[0:2]=np.polyfit(seqA,seqB,1)
+                                            P_2[0:2]=np.polyfit(seqA,seqC,1)
+                                            if not (abs(P_1[0]-1)>0.5 or abs(P_2[0]-1)>0.5) and 100*scp.pearsonr(seqA,seqB)[0]>50 and 100*scp.pearsonr(seqA,seqC)[0]>50:
+                                                dd_CC[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=(dd2_1.copy()-P_1[1])/P_1[0]+(dd2_2.copy()-P_2[1])/P_2[0]
                                             else:
-                                                if len(dd1)>1 and len(dd1[0])>=len(dd1):
-                                                    eeA= (XFilter.RALF1FilterX( dd1-seqA_*((DD__A)),len(dd1),len(dd1[0]),1,0))+seqA_*((DD__A))
-                                                    eeB=-(XFilter.RALF1FilterX(-dd1-seqA_*((DD__B)),len(dd1),len(dd1[0]),1,0))-seqA_*((DD__B))
-                                                    dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeB>0)*((eeA+eeB)>0)
-                                                    dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeA<0)*((eeA+eeB)<0)
-                                              
-                                                dd2=0.5*(dd_AA+dd_BB)[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]
-                                                seqB=(dd2.reshape(len(dd2)*len(dd2[0])))[1:]*np.ceil(0.5*(1/(mdd4_.reshape(len(dd2)*len(dd2[0]))==1)[0:len(dd2)*len(dd2[0])-1]+1/(mdd4_.reshape(len(dd2)*len(dd2[0]))==1)[1:]))
-                                                seqB=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqB)),float) 
-                                                seqB=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqB)),float)    
-                                            
-                                                P[0:2]=np.polyfit(seqA,seqB,1)
-                                                try:
-                                                    if not abs(P[0]-1)>0.5 and 100*scp.pearsonr(seqA,seqB)[0]>50:
-                                                        dd_CC[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=(dd2.copy()-P[1])/P[0] 
-                                                    else:
-                                                        PP=0
-                                                except:
-                                                    PP=0    
-
+                                                PP=0    
                                         except:
                                             PP=0    
                                             

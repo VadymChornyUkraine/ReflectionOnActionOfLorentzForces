@@ -300,6 +300,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                        
                         mDD4_A=(mDD4_A-np.mean(mDD4_A))#*0
                         mDD4_B=(mDD4_B-np.mean(mDD4_B))#*0
+                        mDD4_A=mDD4_A*(mDD4_A>0)
+                        mDD4_B=mDD4_B*(mDD4_B>0)
                         
                         nNxA=sum(sum(mDD4==1))     
                         nNxA_=sum(sum(mDD4==0))  
@@ -313,25 +315,31 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             seqA=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqA)),float) 
                             seqA=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqA)),float)
 
-                            dQ4_A= np.asarray(  XFilter.RALF1FilterX( (dQ4)-seqA_*((mDD4_A)),len(dQ4),len(dQ4[0]),1,0)+seqA_*((mDD4_A)),np.float16)
-                            dQ4_B= np.asarray( -XFilter.RALF1FilterX(-(dQ4)-seqA_*((mDD4_B)),len(dQ4),len(dQ4[0]),1,0)-seqA_*((mDD4_B)),np.float16)
+                            dQ4_A= np.asarray(  XFilter.RALF1FilterX( (dQ4)+seqA_*((mDD4_A)),len(dQ4),len(dQ4[0]),1,0)-seqA_*((mDD4_A)),np.float16)
+                            dQ4_B= np.asarray( -XFilter.RALF1FilterX(-(dQ4)+seqA_*((mDD4_B)),len(dQ4),len(dQ4[0]),1,0)+seqA_*((mDD4_B)),np.float16)
                          
                             #dQ4=dQ4_B*(dQ4_B>0)*((dQ4_A+dQ4_B)>0)+dQ4_A*(dQ4_A<0)*((dQ4_A+dQ4_B)<0)#                      
-                            dQ4=(dQ4_A+dQ4_B)/2
-                            dQ4_A=dQ4.copy()
-                            dQ4_B=dQ4.copy() 
+                            # dQ4=(dQ4_A+dQ4_B)/2
+                            # dQ4_A=dQ4.copy()
+                            # dQ4_B=dQ4.copy() 
                             
-                            seqB=(dQ4.reshape(NCh*NCh0))[1:]*np.ceil(0.5*(1/(mDD4.reshape(NCh*NCh0)==1)[0:NCh*NCh0-1]+1/(mDD4.reshape(NCh*NCh0)==1)[1:]))
+                            seqB=(dQ4_A.reshape(NCh*NCh0))[1:]*np.ceil(0.5*(1/(mDD4.reshape(NCh*NCh0)==1)[0:NCh*NCh0-1]+1/(mDD4.reshape(NCh*NCh0)==1)[1:]))
                             seqB=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqB)),float) 
                             seqB=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqB)),float)
-                            try:       
-                                P[0:2]=np.polyfit(seqA,seqB,1)
+                            seqC=(dQ4_B.reshape(NCh*NCh0))[1:]*np.ceil(0.5*(1/(mDD4.reshape(NCh*NCh0)==1)[0:NCh*NCh0-1]+1/(mDD4.reshape(NCh*NCh0)==1)[1:]))
+                            seqC=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqC)),float) 
+                            seqC=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqC)),float)
+                            try:    
+                                P_1=P.copy()
+                                P_2=P.copy()
+                                P_1[0:2]=np.polyfit(seqA,seqB,1)
+                                P_2[0:2]=np.polyfit(seqA,seqC,1)
                                 # P[0]=np.std(seqB)/np.std(seqA)
                                 # P[1]=np.mean(seqB)-P[0]*np.mean(seqA)  
                                 # P[2]=0
-                                if 100*scp.pearsonr(seqA,seqB)[0]>50 and not abs(P[0]-1)>0.5:   
-                                    dQ4_A=(dQ4_A-P[1])/P[0]
-                                    dQ4_B=(dQ4_B-P[1])/P[0]                                      
+                                if 100*scp.pearsonr(seqA,seqB)[0]>50 and 100*scp.pearsonr(seqA,seqC)[0]>50 and not (abs(P_1[0]-1)>0.5 or abs(P_2[0]-1)>0.5):   
+                                    dQ4_A=(dQ4_A-P_1[1])/P_1[0]
+                                    dQ4_B=(dQ4_B-P_2[1])/P_2[0]                                      
                                     for ll in range(NCh0):
                                         dQ3mx[NumFri[ii:ii+NCh],NumFri_[i+ll]]=(#dQ3mx[NumFri[ii:ii+NCh],NumFri_[i+ll]]*dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+
                                                                                 np.maximum(dQ3mx[NumFri[ii:ii+NCh],NumFri_[i+ll]],dQ4_A[:,ll]))#/(dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+1)
@@ -445,8 +453,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
                         dd1_x.append(dd1)
                         dd2_x.append(dd2)
-                        dd1=np.mean(dd1_x,axis=0)
-                        dd2=np.mean(dd2_x,axis=0)
+                        dd1=np.amax(dd1_x,axis=0)
+                        dd2=np.amin(dd2_x,axis=0)
                         sr2_1=[]
                         sr2_2=[]
                         sarr_c=[]
@@ -463,10 +471,10 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     
                         P_1=P.copy()
                         P_2=P.copy()
-                        sr2=(sr2_1+sr2_2)/2
+                        #sr2=(sr2_1+sr2_2)/2
                         
-                        P_1[0:2]=np.polyfit(sarr_c,sr2,1)
-                        P_2[0:2]=np.polyfit(sarr_c,sr2,1)
+                        # P_1[0:2]=np.polyfit(sarr_c,sr2,1)
+                        # P_2[0:2]=np.polyfit(sarr_c,sr2,1)
                         
                         P_1[0]=np.std(sr2_1)/np.std(sarr_c)
                         P_1[1]=np.mean(sr2_1)-P_1[0]*np.mean(sarr_c) 
@@ -481,14 +489,14 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             max_dd1[hh]=rr2[hh].copy()
                             min_dd2[hh]=rr2[hh].copy()
                             for l in range(NChan):
-                                #if hh==0:
+                                if hh==0:
                                      max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=dd1[Nf-NNew+Nf*l:Nf+Nf*l].copy()
                                      min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=dd2[Nf-NNew+Nf*l:Nf+Nf*l].copy()
-                                # else:
-                                #      max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(max_dd1[hh-1,Nf-NNew+Nf*l:Nf+Nf*l]*hh+
-                                #                                        (dd1[Nf-NNew+Nf*l:Nf+Nf*l]))/(hh+1)
-                                #      min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(min_dd2[hh-1,Nf-NNew+Nf*l:Nf+Nf*l]*hh+
-                                #                                        (dd2[Nf-NNew+Nf*l:Nf+Nf*l]))/(hh+1)
+                                else:
+                                      max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=np.maximum(max_dd1[hh-1,Nf-NNew+Nf*l:Nf+Nf*l],
+                                                                        (dd1[Nf-NNew+Nf*l:Nf+Nf*l]))
+                                      min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=np.minimum(min_dd2[hh-1,Nf-NNew+Nf*l:Nf+Nf*l],
+                                                                        (dd2[Nf-NNew+Nf*l:Nf+Nf*l]))
                                                                                
                             hh=hh+1
                             ann=0         
@@ -500,6 +508,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
                             # rr2[hh]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
                             rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,-2+1*(hh==Nhh)))/hh 
+                            ##rr2[hh]=(rr2[hh-1]*(hh-1)+rr2[hh])/hh                             
                             sr2=[]
                             sarr_c=[]
                             for l in range(NChan):  
