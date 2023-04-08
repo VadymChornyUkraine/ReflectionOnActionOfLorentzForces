@@ -705,7 +705,7 @@ if __name__ == '__main__':
                                             P_1[0:2]=np.polyfit(seqA,seqB,1)
                                             P_2[0:2]=np.polyfit(seqA,seqC,1)
                                             if not (abs(P_1[0]-1)>0.5 or abs(P_2[0]-1)>0.5) and 100*scp.pearsonr(seqA,seqB)[0]>50 and 100*scp.pearsonr(seqA,seqC)[0]>50:
-                                                dd_CC[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=(dd2_1.copy()-P_1[1])/P_1[0]+(dd2_2.copy()-P_2[1])/P_2[0]
+                                                dd_CC[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=0.5*((dd2_1.copy()-P_1[1])/P_1[0]+(dd2_2.copy()-P_2[1])/P_2[0])
                                             else:
                                                 PP=0    
                                         except:
