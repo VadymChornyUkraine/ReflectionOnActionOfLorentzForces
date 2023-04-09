@@ -16,8 +16,8 @@ dNIt=8
 Ngroup=3
 Lo=1
 Nproc=2*Ngroup#*(os.cpu_count())
-wrkdir = r"c:/work/WX15/"
-[hhha,Arr_AAA]=(hkl.load(wrkdir + "ADA-USD"+".rlf1"))
+wrkdir = r"c:/work/WX14/"
+[hhha,Arr_AAA]=(hkl.load(wrkdir + "xdrusd"+".rlf1"))
 NIter=100
 
 for iGr in range(Ngroup):  
@@ -37,10 +37,10 @@ anI=len(ZDat)
 
 if Lo:
     ar0x=np.exp(np.median(ZDat,axis=0))  
-    ar0x_=.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+    ar0x_=1.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
 else:
     ar0x=np.median(ZDat,axis=0)
-    ar0x_=.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
+    ar0x_=1.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
     
 for i in range(anI):    
     if Lo:                                
