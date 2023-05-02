@@ -78,8 +78,8 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
     Nfl_=int(len(arxx)/NChan)
     Nnl=NNew    
     
-    ar_=np.zeros(Nnl,float)
-    farx=np.zeros(2*Nnl,float)-1e32
+    #ar_=np.zeros(Nnl,float)
+    farx=np.zeros(8*Nnl,float)-1e32
     
     az=int(np.floor(Nfl/Nnl))
     
@@ -89,12 +89,16 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
             ar_=arb[Nfl-(az-i)*Nnl+Nfl*l:Nfl+Nnl-(az-i)*Nnl+Nfl*l].copy()
             gg0=gg0+np.sum(ar_*ar_)
             #ar_=ar_[::-1].copy()
-            ar_=ar_-ar_[len(ar_)-1]
+            ar_=ar_-ar_[0]
             #ar_=ar_-np.mean(ar_)
             ar_x=ar_[::-1].copy()
-            ar__=abs(np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_x)))) 
+            ar_=np.concatenate((ar_x,-2*((key<0)-.5)*ar_))
+            ar_=np.concatenate((ar_[::-1],ar_))
+            ar_=ar_-ar_[len(ar_)-1]
+            ar_=np.concatenate((ar_,-ar_))
+            ar__=abs(np.fft.fft(ar_))
             farx=np.maximum(farx,ar__)
-    gg0=np.sqrt(gg0)/(NChan*az*Nnl)
+    #gg0=np.sqrt(gg0)/(NChan*az*Nnl)
      
     gg=0
     arxr=arxx.copy()
@@ -107,13 +111,17 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         #ar_=ar_-ar_[len(ar_)-1]
         #ar_=ar_-np.mean(ar_)
         ar_x=ar_[::-1].copy()
-        farxx=np.fft.fft(np.concatenate((ar_,-2*((key<0)-.5)*ar_x)))    
+        ar_=np.concatenate((ar_,-2*((key<0)-.5)*ar_x))
+        ar_=np.concatenate((ar_[::-1],ar_))
+        ar_=ar_-ar_[len(ar_)-1]
+        ar_=np.concatenate((ar_,-ar_))
+        farxx=np.fft.fft(ar_)    
         mfarxx=np.abs(farxx)+1e-32  
-        farxxx=np.zeros(2*Nnl,complex)    
+        farxxx=np.zeros(8*Nnl,complex)    
 
-        A1=np.exp(DETERM*np.std(np.log(mfarxx[3:2*Nnl-2]))+np.mean(np.log(mfarxx[3:2*Nnl-2])))
+        A1=np.exp(DETERM*np.std(np.log(mfarxx[5:8*Nnl-4]))+np.mean(np.log(mfarxx[5:8*Nnl-4])))
  
-        for j in range(1,2*Nnl):
+        for j in range(1,8*Nnl):
             if mfarxx[j]>A1:
                 farxxx[j]=(farxx[j]/mfarxx[j])*np.sqrt(farx[j]*mfarxx[j]) 
                 #farxxx[j]=(farxx[j]/mfarxx[j])*farx[j]
@@ -127,7 +135,8 @@ def filterFourierQ(arxx,arb,NNew,NChan,key=-1):
         #     farxxx[2*Nnl-2]=farxxx[2*Nnl-2]*0            
                    
         aaa=np.fft.ifft(farxxx).real
-        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=((aaa[0:Nnl]-2*((key<0)-.5)*aaa[2*Nnl:Nnl-1:-1])/2)[::-1]
+        aaa=aaa[2*Nnl:4*Nnl].copy()
+        arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]=((aaa[0:Nnl]-2*((key<0)-.5)*aaa[2*Nnl:Nnl-1:-1])/2)[::-1]#aaa[0:Nnl][::-1]#
         #arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l]= savgol_filter(arxr[Nfl_-Nnl+Nfl_*l:Nfl_+Nfl_*l], 14, 5)
         gg=gg-arxr[Nfl_-Nnl+Nfl_*l]+arb[Nfl_-Nnl+Nfl_*l-1]
 
@@ -209,6 +218,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
         liiD=np.concatenate((aa,aa,aa))          
 
         rrr=rr2[hh].copy()
+        # rrr_=rrr[0]
+        # rrr[1:]=np.diff(rrr)
             
         for i in range(sz):    
             liix[i]=liiB[liiD[i]:sz+liiD[i]].copy()
@@ -421,6 +432,9 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                 # aMn_=aMn
             ann=sum(np.isnan(aMx_ + aMn_))
             if ann==0: 
+                # rrr=rrr_-rrr[0]+np.cumsum(rrr)
+                # aMn_=rrr_-aMn_[0]+np.cumsum(aMn_)
+                # aMx_=rrr_-aMx_[0]+np.cumsum(aMx_)                
                 if hh==0: 
                     AMX[hh]=aMx_.copy()
                     AMN[hh]=aMn_.copy()  
@@ -449,6 +463,9 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     
                 ann=1  
                 try:
+                    for l in range(NChan):                             
+                        rrr[Nf*l:Nf+Nf*l]= savgol_filter(rrr[Nf*l:Nf+Nf*l], 14, 5)
+
                     dd1=(filterFourierQ(AMX[hh],rrr,NNew,NChan))
                     dd2=(filterFourierQ(AMN[hh],rrr,NNew,NChan)) 
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
@@ -502,13 +519,15 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             hh=hh+1
                             ann=0         
                             rr2[hh]=(max_dd1[hh-1]+min_dd2[hh-1])/2
+                            
                             # dd1=max_dd1[hh-1].copy()
                             # dd2=min_dd2[hh-1].copy()
                             # dd0=(dd1+dd2)/2
                             # asr1=abs(dd1-dd0)>abs(dd2-dd0)
                             # asr2=abs(dd1-dd0)<abs(dd2-dd0)                    
                             # rr2[hh]=dd1*asr1+dd2*asr2+(dd1+dd2)*(asr1==asr2)/2
-                            rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rr2[hh-1],NNew,NChan,-2+1*(hh==Nhh)))/hh 
+                            rr2[hh]=(rr2[hh-1]*(hh-1)+filterFourierQ(rr2[hh],rrr,NNew,NChan,-2+1*(hh==Nhh)))/hh 
+                            
                             ##rr2[hh]=(rr2[hh-1]*(hh-1)+rr2[hh])/hh                             
                             sr2=[]
                             sarr_c=[]
@@ -531,7 +550,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                                     rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=(rr2[hh,Nf-NNew+Nf*l:Nf+Nf*l]-P[1])/P[0]
                                     rr2[hh,Nf*l:Nf-NNew+Nf*l]=arr_b[Nf*l:Nf-NNew+Nf*l].copy()
                                 #P[0:2]=np.polyfit(sarr_c,sr2,1)   
-    
+                                
                                 #D1=0.2
                                 if hh==Nhh:
                                     # sr2=[]
@@ -620,6 +639,7 @@ def RALf1FiltrQ(args):
         while hh<Nhh:
             if hh<Nhh:    
                 arr_bbbxxx=RALF1Calculation(arr_b,arr_c,Nf,NNew0,NNew,NChan,NumIt,args[0],Nproc)                
+                
                 try:
                     arrrxx=hkl.load("ralfrez.rlf2")
                 except:
