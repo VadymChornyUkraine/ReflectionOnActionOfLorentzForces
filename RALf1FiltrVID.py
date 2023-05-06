@@ -262,7 +262,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
         liiC=np.concatenate((aa, aa, aa)) 
         aa=RandomQ(sz)  
         r5=aa.copy()
-        r5=r5*D/np.std(r5)
+        r5=2*r5*D/np.std(r5)
         r5=r5-np.mean(r5)
         r5=np.concatenate((r5, r5))
         aa=RandomQ(sz) 

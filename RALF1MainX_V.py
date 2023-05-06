@@ -14,7 +14,7 @@ from scipy import stats as scp
 import dateutil.parser
 from operator import itemgetter
 import dill 
-#from scipy.signal import savgol_filter
+from scipy.signal import savgol_filter
 #import wmi as wm
 import csv
 from RALf1FiltrVID import filterFourierQ
@@ -23,7 +23,7 @@ from RALf1FiltrVID import RandomQ
 import RALF1FilterX as XFilter  
 
 WhO=[
-# "SOL-USD",
+ "UAH=X"
 # "LRC-USD",
 # "DOT-USD",
 # "LINK-USD",
@@ -32,12 +32,12 @@ WhO=[
 # "ATOM-USD",
 # "DOGE-USD",
 # "ADA-USD",
-"xdrusd"
+# "xdrusd"
 ]
 
 MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"c:/Work/WX14/"
+wrkdir = r"C:/Users/VadymChornyy/Desktop/Work/WX14/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -46,9 +46,9 @@ interv="Daily"
 #INTRADAY
 #d_intervals = {"1min","5min","15min","30min","60min"}
 
-Lengt0=700
+Lengt0=7000
 Ngroup=3
-Nproc=2*Ngroup#*(os.cpu_count())
+Nproc=3*Ngroup#*(os.cpu_count())
 Lo=1  
 lSrez=0.99
 aTmStop=1
@@ -56,7 +56,7 @@ NIt=3
 NIter=100
 DT=0.3
 dNIt=4
-aDecm=2
+aDecm=7
 KPP=0
 
 aKEY=0
@@ -134,7 +134,7 @@ def loaddata(aLengt,ticker1,key):
             adat_.append(ada[sz-ln+i])
     else:
         with open(wrkdir+ticker1+ '.csv', newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
+            spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             dat=[]
             i=0
             for row in spamreader:
@@ -142,12 +142,15 @@ def loaddata(aLengt,ticker1,key):
                     dat.append(row[2])
                 i=i+1
         dat=dat[len(dat)-aLengt+2*aDecm:]
-        dat=dat[:len(dat)]
+        dat=dat[:len(dat)-1]
+        seq0=np.asarray(list(filter(lambda x: x!= 'null', dat)),float) 
+         
+
         try:
-            dat=np.asarray(dat,float)
-            arrr=np.asarray(dat,float)
+            dat=np.asarray(seq0,float)
+            arrr=np.asarray(seq0,float)
         except:
-            dat=dat
+            dat=seq0
             arrr=np.zeros(2,int)
         
     return arrr,adat_
@@ -191,14 +194,14 @@ arrrxxR_=np.asarray(aaer,float)
 aKEY=1
 for uuii in range(len(nnams_)):
     aname=nnams_[uuii]
-    ticker=aname+"YLLL"
+    ticker=aname+"YXLLL"
     ticker1=aname
     ticker2=aname
     try:                
-        hkl.dump(arrrxxR_[uuii],wrkdir + aname+"dat.rlf1")
+        hkl.dump(arrrxxR_[uuii],wrkdir + aname+"datt.rlf1")
     except:
         os.mkdir(wrkdir)
-        hkl.dump(arrrxxR_[uuii],wrkdir + aname+"dat.rlf1")
+        hkl.dump(arrrxxR_[uuii],wrkdir + aname+"datt.rlf1")
 hkl.dump(nnams_,wrkdir + "name_.rlf1")
 
 import warnings
@@ -219,17 +222,17 @@ if __name__ == '__main__':
         Nii=len(nnams_)
         aname=nnams_[uuii]
         print(aname)
-        ticker=aname+"YLLL"
+        ticker=aname+"YXLLL"
         ticker1=aname
         ticker2=aname
         try:
-            dill.load_session(wrkdir + aname+".ralf")
+            dill.load_session(wrkdir + aname+"X.ralf")
             nnams_=hkl.load(wrkdir + "name_.rlf1")
             Nii=len(nnams_)
         except:
             ImApp=[]
             try:
-                arrrxx=hkl.load(wrkdir + aname+"dat.rlf1")
+                arrrxx=hkl.load(wrkdir + aname+"datt.rlf1")
             except:
     
                 #ticker ="EOSOMG" # "BTCUSD"#"GLD"#"DJI","LOIL.L"#""BZ=F" "LNGA.MI" #"BTC-USD"#"USDUAH"#"LTC-USD"#"USDUAH"#
@@ -248,10 +251,10 @@ if __name__ == '__main__':
                 arrrxx=decimat(arrrxx)
                     
                 try:                
-                    hkl.dump(arrrxx,wrkdir + aname+"dat.rlf1")
+                    hkl.dump(arrrxx,wrkdir + aname+"datt.rlf1")
                 except:
                     os.mkdir(wrkdir)
-                    hkl.dump(arrrxx,wrkdir + aname+"dat.rlf1")
+                    hkl.dump(arrrxx,wrkdir + aname+"datt.rlf1")
                 
             esz=len(arrrxx)
             arr_rezDzRez=[[] for j in range(esz)]
@@ -297,7 +300,7 @@ if __name__ == '__main__':
             ZZ=0
             key=0
             try:
-                dill.load_session(wrkdir + aname+".ralf")
+                dill.load_session(wrkdir + aname+"X.ralf")
                 nnams_=hkl.load(wrkdir + "name_.rlf1")
                 Nii=len(nnams_)
             except:    
@@ -329,7 +332,7 @@ if __name__ == '__main__':
                 gray_sz2=len(cimg)
                 aDur=2
                 fourcc = cv.VideoWriter_fourcc(*'MP4V')
-                out = cv.VideoWriter(wrkdir + aname+'.mp4',fourcc, aDur, (gray_sz1,gray_sz2))                   
+                out = cv.VideoWriter(wrkdir + aname+'X.mp4',fourcc, aDur, (gray_sz1,gray_sz2))                   
                 for icl in range(len(ImApp)):
                     cimgx=(cv.cvtColor(np.array(ImApp[icl]), cv.COLOR_RGB2BGR)) 
                     out.write(cimgx[0:gray_sz2,0:gray_sz1,:]) 
@@ -458,7 +461,7 @@ if __name__ == '__main__':
                 aMM=3
 
                 for iGr in range(Ngroup):  
-                    ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hh0+1)*int(Nproc/Ngroup)].copy()
+                    ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hh0+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+((hh0+1))*int(Nproc/Ngroup)].copy()
                     if iGr==0:
                         xxxx=ZDat.copy()
                     else:
@@ -467,6 +470,7 @@ if __name__ == '__main__':
                 
                 anI=len(ZDat)
                 # for i in range(anI):  
+                #     ZDat[i]= savgol_filter(ZDat[i], 14, 5)
                 #     if Lo:
                 #         ZDat[i][:len(ar0)]=np.log(ar0)
                 #     else:
@@ -474,10 +478,10 @@ if __name__ == '__main__':
                 
                 if Lo:
                     ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=1.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
+                    ar0x_=.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
                 else:
                     ar0x=np.median(ZDat,axis=0)
-                    ar0x_=1.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
+                    ar0x_=.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
 
                 for i in range(anI):    
                     if Lo:                                
@@ -539,14 +543,31 @@ if __name__ == '__main__':
                         hhhx=0
                         anI=len(ZDat)
                         # for i in range(anI):  
-                        #     ZDat[i][:len(ar0)]=ar0.copy()
-                        for i in range(anI):
-                            if Lo:                                
-                                ZDat[i]=np.exp(np.log(ZDat[i])*(abs(np.log(ZDat[i])-np.log(ar0_))<=ar0x_)+np.log(ar0_)*(abs(np.log(ZDat[i])-np.log(ar0_))>ar0x_))
-                            else:
-                                ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0_))<=ar0x_)+ar0_*(abs((ZDat[i])-(ar0_))>ar0x_))
-                            ZDat[i][0:Nf-NNew]=arr_z[0:Nf-NNew].copy()
-                        
+                        # #     ZDat[i][:len(ar0)]=ar0.copy()
+                        #     if Lo:
+                        #         ZDat[i]= np.exp(savgol_filter(np.log(ZDat[i]), 14, 5))
+                        #     else:
+                        #         ZDat[i]= savgol_filter(ZDat[i], 14, 5)
+                        lnn=len(ZDat[0])
+                        for i in range(anI):    
+                            for j in range(lnn):    
+                                if Lo:     
+                                    ZDat[i]=np.log(ZDat[i])
+                                    if not abs(ZDat[i,j]-np.log(ar0x[j]))<=ar0x_[j]:     
+                                        if ZDat[i,j]<(np.log(ar0x[j])-ar0x_[j]):            
+                                            ZDat[i,j]=np.log(ar0x[j])-ar0x_[j]
+                                        else: 
+                                            if ZDat[i,j]>(np.log(ar0x[j])+ar0x_[j]):
+                                                ZDat[i,j]=np.log(ar0x[j])+ar0x_[j]
+                                    ZDat[i]=np.exp(ZDat[i])
+                                else:
+                                    if not abs(ZDat[i,j]-(ar0x[j]))<=ar0x_[j]:     
+                                        if ZDat[i,j]<((ar0x[j])-ar0x_[j]):            
+                                            ZDat[i,j]=(ar0x[j])-ar0x_[j]
+                                        else:
+                                            if ZDat[i,j]>((ar0x[j])+ar0x_[j]):
+                                                ZDat[i,j]=(ar0x[j])+ar0x_[j]
+                                
                         if hhh==0:
                             if Lo:
                                 arr_rezBzz=np.exp(np.median(np.log(ZDat),axis=0)) 
@@ -617,7 +638,7 @@ if __name__ == '__main__':
                                     vvv=ss4_[hhhc:hhhc+Nf].copy()
                                     DD_.append(vvv[::-1].copy())
                                 DD_=np.asarray(DD_,float)                              
-                                DD_=(DD_/np.std(DD_))*D
+                                DD_=(DD_/np.std(DD_))*D*2
                                 DD_=(DD_-np.mean(DD_))
                                 #DD_=DD_*0
                                                         
@@ -942,7 +963,7 @@ if __name__ == '__main__':
                     gray_sz2=min(gray_sz2,len(cimg))
                     ImApp.append(frame)
                     if WrtTodr>0 or 33*int((hhh+1)/33)==(hhh+1) or hhha==(hhh+1):
-                        out = cv.VideoWriter(wrkdir + aname+'.mp4',fourcc, aDur, (gray_sz1,gray_sz2))                   
+                        out = cv.VideoWriter(wrkdir + aname+'X.mp4',fourcc, aDur, (gray_sz1,gray_sz2))                   
                         for icl in range(len(ImApp)):
                             cimgx=(cv.cvtColor(np.array(ImApp[icl]), cv.COLOR_RGB2BGR)) 
                             out.write(cimgx[0:gray_sz2,0:gray_sz1,:]) 
@@ -962,13 +983,13 @@ if __name__ == '__main__':
                     #     break
                 else:
                     try:
-                        dill.load_session(wrkdir + aname+".ralf")
+                        dill.load_session(wrkdir + aname+"X.ralf")
                     except:
                         hh0=hh0    
                 hh0=hh0+1
                 if WrtTodr>0:
                     try:
-                        dill.dump_session(wrkdir + aname+".ralf")  
+                        dill.dump_session(wrkdir + aname+"X.ralf")  
                     except:
                         hh0=hh0
                 if hh0==2*NIter:
@@ -1028,7 +1049,7 @@ if __name__ == '__main__':
     gray_sz2=min(gray_sz2,len(cimg))
     for icl in range(10):
         ImApp.append(frame)
-    out = cv.VideoWriter(wrkdir + aname+'.mp4',fourcc, aDur, (gray_sz1,gray_sz2))                   
+    out = cv.VideoWriter(wrkdir + aname+'X.mp4',fourcc, aDur, (gray_sz1,gray_sz2))                   
     for icl in range(len(ImApp)):
         cimgx=(cv.cvtColor(np.array(ImApp[icl]), cv.COLOR_RGB2BGR)) 
         out.write(cimgx[0:gray_sz2,0:gray_sz1,:])       
