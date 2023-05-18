@@ -5,13 +5,13 @@ import RALF1FilterX as XFilter
 import sys
 import lfib1340 
 from scipy import stats as scp
-#import win32api,win32process,win32con 
+import win32api,win32process,win32con 
 from random import sample 
 #from scipy.signal import savgol_filter
-#import wmi
+import wmi
 import hickle as hkl
 from scipy.signal import savgol_filter
-MaxTemp=82
+MaxTemp=90
  
 
 def CheckTemp(aTemp=MaxTemp):
@@ -27,17 +27,17 @@ def CheckTemp(aTemp=MaxTemp):
     # else:
         return 1
         
-# priorityclasses = [win32process.IDLE_PRIORITY_CLASS,
-#                win32process.BELOW_NORMAL_PRIORITY_CLASS,
-#                win32process.NORMAL_PRIORITY_CLASS,
-#                win32process.ABOVE_NORMAL_PRIORITY_CLASS,
-#                win32process.HIGH_PRIORITY_CLASS,
-#                win32process.REALTIME_PRIORITY_CLASS]  
+priorityclasses = [win32process.IDLE_PRIORITY_CLASS,
+                win32process.BELOW_NORMAL_PRIORITY_CLASS,
+                win32process.NORMAL_PRIORITY_CLASS,
+                win32process.ABOVE_NORMAL_PRIORITY_CLASS,
+                win32process.HIGH_PRIORITY_CLASS,
+                win32process.REALTIME_PRIORITY_CLASS]  
 
 DETERM=0.1
 
 def RandomQ(Nfx,NQRandm_=0):
-    while not CheckTemp:
+    while not CheckTemp():
         tm.sleep(60)
     QRandm_=np.asarray(range(512),float)
     NQRandm=0  
@@ -472,8 +472,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
                         dd1_x.append(dd1)
                         dd2_x.append(dd2)
-                        dd1=np.amax(dd1_x,axis=0)
-                        dd2=np.amin(dd2_x,axis=0)
+                        # dd1=np.amax(dd1_x,axis=0)
+                        # dd2=np.amin(dd2_x,axis=0)
                         sr2_1=[]
                         sr2_2=[]
                         sarr_c=[]
@@ -592,9 +592,9 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                 return rr2[hh]/0                                                 
 
 def RALf1FiltrQ(args):  
-    # pid = win32api.GetCurrentProcessId()
-    # handle = win32api.OpenProcess(win32con.PROCESS_ALL_ACCESS, True, pid)
-    # win32process.SetPriorityClass(handle, priorityclasses[1])
+    pid = win32api.GetCurrentProcessId()
+    handle = win32api.OpenProcess(win32con.PROCESS_ALL_ACCESS, True, pid)
+    win32process.SetPriorityClass(handle, priorityclasses[1])
     NChan=int(args[1])
     NNew=int(args[2])
     Nhh=int(args[3])
