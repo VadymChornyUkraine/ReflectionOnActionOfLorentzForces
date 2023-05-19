@@ -15,7 +15,7 @@ import dateutil.parser
 from operator import itemgetter
 import dill 
 #from scipy.signal import savgol_filter
-#import wmi as wm
+import wmi as wm
 import csv
 from RALf1FiltrVID import filterFourierQ
 from RALf1FiltrVID import RALf1FiltrQ
@@ -24,7 +24,7 @@ import RALF1FilterX as XFilter
 
 MxTime=0.5*60*60 # 2 haurs
 #https://query1.finance.yahoo.com/v7/finance/download/LRC-USD?period1=1635554377&period2=1667097577&interval=1d&events=history&includeAdjustedClose=true
-wrkdir = r"C:/Users/VadymChornyy/Desktop/Work/WX15/"
+wrkdir = r"C:/Work/WX16/"
 api_key = 'ONKTYPV6TAMZK464' 
  
 interv="15min"
@@ -146,7 +146,7 @@ except:
     WhO=[
          "SHIB-USD",
          "SOL-USD",
-    "BTC-USD", 
+    #"BTC-USD", 
     "ETH-USD", 
   "ADA-USD", 
 "SOL-USD", 
@@ -623,10 +623,10 @@ if __name__ == '__main__':
                             dd=ZDat[i][Nf-NNew:].copy()                         
                             if Lo:
                                 x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1,-2)[Nf-NNew:]
+                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
                             else:
                                 x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1,-2)[Nf-NNew:]
+                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
                             P[0:2]=np.polyfit(x,ZDat[i][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))],1)
                             if not P[0]>0:
                                 P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
@@ -699,7 +699,7 @@ if __name__ == '__main__':
                                         seqA=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqA)),float)    
                                         
                                         DD__A=DD_[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)].copy()
-                                        DD__B=DD__A.copy()#-DD__A[:,::-1].copy()
+                                        DD__B=-DD__A.copy()#-DD__A[:,::-1].copy()
                                         DD__A=DD__A*(DD__A>0)
                                         DD__B=DD__B*(DD__B>0)
                                         
