@@ -426,11 +426,10 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
             for i in  range(sz):
                 aMx[liix[i]]=np.maximum(aMx[liix[i]],AsrXMx_[i])
                 aMn[liix[i]]=np.minimum(aMn[liix[i]],AsrXMn_[i])
-                aMx_=(aMx_*i+aMx)/(i+1)#
-                aMn_=(aMn_*i+aMn)/(i+1)#
-                # aMx_=aMx
-                    
-                # aMn_=aMn
+                # aMx_=(aMx_*i+aMx)/(i+1)#
+                # aMn_=(aMn_*i+aMn)/(i+1)#
+            aMx_=aMx.copy()                    
+            aMn_=aMn.copy()
             ann=sum(np.isnan(aMx_ + aMn_))
             if ann==0: 
                 # rrr=rrr_-rrr[0]+np.cumsum(rrr)
