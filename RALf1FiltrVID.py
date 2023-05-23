@@ -472,8 +472,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     if sum(np.abs(dd1+dd2)==np.Inf)==0 and D1>DETERM:  
                         dd1_x.append(dd1)
                         dd2_x.append(dd2)
-                        # dd1=np.amax(dd1_x,axis=0)
-                        # dd2=np.amin(dd2_x,axis=0)
+                        dd1=np.mean(dd1_x,axis=0)
+                        dd2=np.mean(dd2_x,axis=0)
                         sr2_1=[]
                         sr2_2=[]
                         sarr_c=[]
