@@ -507,14 +507,14 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             max_dd1[hh]=rr2[hh].copy()
                             min_dd2[hh]=rr2[hh].copy()
                             for l in range(NChan):
-                                if hh==0:
+                                #if hh==0:
                                      max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=dd1[Nf-NNew+Nf*l:Nf+Nf*l].copy()
                                      min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=dd2[Nf-NNew+Nf*l:Nf+Nf*l].copy()
-                                else:
-                                      max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=np.maximum(max_dd1[hh-1,Nf-NNew+Nf*l:Nf+Nf*l],
-                                                                        (dd1[Nf-NNew+Nf*l:Nf+Nf*l]))
-                                      min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=np.minimum(min_dd2[hh-1,Nf-NNew+Nf*l:Nf+Nf*l],
-                                                                        (dd2[Nf-NNew+Nf*l:Nf+Nf*l]))
+                                # else:
+                                #       max_dd1[hh,Nf-NNew+Nf*l:Nf+Nf*l]=np.maximum(max_dd1[hh-1,Nf-NNew+Nf*l:Nf+Nf*l],
+                                #                                         (dd1[Nf-NNew+Nf*l:Nf+Nf*l]))
+                                #       min_dd2[hh,Nf-NNew+Nf*l:Nf+Nf*l]=np.minimum(min_dd2[hh-1,Nf-NNew+Nf*l:Nf+Nf*l],
+                                #                                         (dd2[Nf-NNew+Nf*l:Nf+Nf*l]))
                                                                                
                             hh=hh+1
                             ann=0         
