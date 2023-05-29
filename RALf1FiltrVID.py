@@ -169,7 +169,7 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
     warnings.filterwarnings("ignore", category=RuntimeWarning) 
     sz=Nf*NChan
     MM=3
-    Nzz=3
+    Nzz=4
     Nhh=6
     
     Ndel=MM
@@ -358,8 +358,14 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                                                                                 np.maximum(dQ3mx[NumFri[ii:ii+NCh],NumFri_[i+ll]],dQ4_A[:,ll]))#/(dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+1)
                                         dQ3mn[NumFri[ii:ii+NCh],NumFri_[i+ll]]=(#dQ3mn[NumFri[ii:ii+NCh],NumFri_[i+ll]]*dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+
                                                                                 np.minimum(dQ3mn[NumFri[ii:ii+NCh],NumFri_[i+ll]],dQ4_B[:,ll]))#/(dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+1)
+
+                                        # dQ3mx[NumFri[ii:ii+NCh],NumFri_[i+ll]]=(dQ3mx[NumFri[ii:ii+NCh],NumFri_[i+ll]]*dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+
+                                        #                                         dQ4_A[:,ll])/(dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+1)
+                                        # dQ3mn[NumFri[ii:ii+NCh],NumFri_[i+ll]]=(dQ3mn[NumFri[ii:ii+NCh],NumFri_[i+ll]]*dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+
+                                        #                                         dQ4_B[:,ll])/(dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+1)
                                         dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]=dQ3num[NumFri[ii:ii+NCh],NumFri_[i+ll]]+1
                                         dQ3[NumFri[ii:ii+NCh],NumFri_[i+ll]]=(1-seqA_[:,ll])*dQ3_[NumFri[ii:ii+NCh],NumFri_[i+ll]]+seqA_[:,ll]*((dQ3mx+dQ3mn)[NumFri[ii:ii+NCh],NumFri_[i+ll]])/2
+
                                     ll=ll+1
                                 else:
                                     xxx=1
@@ -373,8 +379,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                     AsrXMx=dQ3mx.copy()
                     AsrXMn=dQ3mn.copy()      
                 else:  
-                    AsrXMx=(AsrXMx*zz+np.maximum(AsrXMx,dQ3mx))/(zz+1)
-                    AsrXMn=(AsrXMn*zz+np.minimum(AsrXMn,dQ3mn))/(zz+1)
+                    AsrXMx=(AsrXMx*zz+dQ3mx)/(zz+1)
+                    AsrXMn=(AsrXMn*zz+dQ3mn)/(zz+1)
                     # AsrXMx=np.maximum(AsrXMx,dQ3mx)
                     # AsrXMn=np.minimum(AsrXMn,dQ3mn)
 
