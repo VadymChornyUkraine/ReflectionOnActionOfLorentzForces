@@ -502,39 +502,33 @@ if __name__ == '__main__':
                 ZDat=xxxx.copy()        
                 
                 anI=len(ZDat)
-                # for i in range(anI):  
-                #     ZDat[i]= savgol_filter(ZDat[i], 14, 5)
-                #     if Lo:
-                #         ZDat[i][:len(ar0)]=np.log(ar0)
-                #     else:
-                #         ZDat[i][:len(ar0)]=ar0.copy()
-                
-                if Lo:
-                    ar0x=np.exp(np.median(ZDat,axis=0))  
-                    ar0x_=.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
-                else:
+                for ii in range(3):       
                     ar0x=np.median(ZDat,axis=0)
                     ar0x_=.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
-
-                for i in range(anI):    
-                    if Lo:                                
-                        ZDat[i]=(ZDat[i]*(abs(ZDat[i]-np.log(ar0x))<=ar0x_))+np.log(ar0x)*(abs(ZDat[i]-np.log(ar0x))>ar0x_)
-                    else:
-                        ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
-                # if Lo:
-                #     ar0x=np.exp(np.median(ZDat,axis=0))  
-                #     ar0x_=1.4*np.median(abs(ZDat-np.log(ar0x)),axis=0)
-                #     #ZDat=np.exp(ZDat)
-                # else:
-                #     ar0x=np.median(ZDat,axis=0)
-                #     ar0x_=1.4*(np.median(abs((ZDat)-(ar0x)),axis=0))  
-                    
-                # for i in range(anI):    
-                #     if Lo:                                
-                #         ZDat[i]=(ZDat[i]*(abs(ZDat[i]-np.log(ar0x))<=ar0x_))+np.log(ar0x)*(abs(ZDat[i]-np.log(ar0x))>ar0x_)
-                #     else:
-                #         ZDat[i]=(ZDat[i]*(abs((ZDat[i])-(ar0x))<=ar0x_))+ar0x*(abs((ZDat[i])-(ar0x))>ar0x_)
-
+                        
+                    lnn=len(ZDat[0])
+                    NNew=int(.35*lnn)
+                    for i in range(anI):    
+                        for j in range(lnn):    
+                            if not abs(ZDat[i,j]-(ar0x[j]))<=ar0x_[j]:     
+                                if ZDat[i,j]<((ar0x[j])-ar0x_[j]):            
+                                    ZDat[i,j]=(ar0x[j])-ar0x_[j]
+                                else:
+                                    if ZDat[i,j]>((ar0x[j])+ar0x_[j]):
+                                        ZDat[i,j]=(ar0x[j])+ar0x_[j]
+                    anI=anI
+                    P=np.zeros(3,float)
+                    for i in range(anI):
+                        dd=ZDat[i][lnn-NNew:].copy()                         
+                        x=ar0x[lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))].copy()
+                        ZDat[i][lnn-NNew:]=filterFourierQ(ZDat[i],(ar0x),NNew,1)[lnn-NNew:]
+                        P[0:2]=np.polyfit(x,ZDat[i][lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))],1)
+                        if not P[0]>0:
+                            P[0:2]=np.polyfit(dd,ZDat[i][lnn-NNew:],1)
+                        ZDat[i][lnn-NNew:]=(ZDat[i][lnn-NNew:]-P[1])/P[0]   
+                        
+                if Lo:
+                    ar0x=np.exp(ar0x) 
                 ar0x[0:len(ar0)]=ar0[0:len(ar0)].copy()
                 # ar0x=ar0.copy()
                 # if not sum(abs(arr_rezBzz))==0:
@@ -704,8 +698,8 @@ if __name__ == '__main__':
                                         DD__B=DD__B*(DD__B>0)
                                         
                                         if len(dd1)>1 and len(dd1[0])>=len(dd1):
-                                            eeA= (XFilter.RALF1FilterX( dd1+seqA_*((DD__A)),len(dd1),len(dd1[0]),1,0))-seqA_*((DD__A))
-                                            eeB=-(XFilter.RALF1FilterX(-dd1+seqA_*((DD__B)),len(dd1),len(dd1[0]),1,0))+seqA_*((DD__B))
+                                            eeA=-(XFilter.RALF1FilterX( seqA_*((DD__A))-dd1,len(dd1),len(dd1[0]),1,0))#+seqA_*((DD__A))
+                                            eeB=-(XFilter.RALF1FilterX(-seqA_*((DD__B))-dd1,len(dd1),len(dd1[0]),1,0))-seqA_*((DD__B))
                                             dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeB>0)*((eeA+eeB)>0)
                                             dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeA<0)*((eeA+eeB)<0)
                                       

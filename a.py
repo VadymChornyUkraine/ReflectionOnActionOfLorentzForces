@@ -51,7 +51,7 @@ Ngroup=3
 Lo=1
 Nproc=3*Ngroup#*(os.cpu_count())
 wrkdir = r"C:/Work/WX16/"
-[hhhao,Arr_AAA]=(hkl.load(wrkdir + "BNT-USD"+".rlf1"))
+[hhhao,Arr_AAA]=(hkl.load(wrkdir + "LRC-USD"+".rlf1"))
 NIter=100
 
 for hhhai in range(hhhao):  
