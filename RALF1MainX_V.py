@@ -474,7 +474,7 @@ if __name__ == '__main__':
                     ar0x_=.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
                         
                     lnn=len(ZDat[0])
-                    NNew=int(.35*lnn)
+                    #NNew=int(.35*lnn)
                     for i in range(anI):    
                         for j in range(lnn):    
                             if not abs(ZDat[i,j]-(ar0x[j]))<=ar0x_[j]:     
@@ -483,16 +483,16 @@ if __name__ == '__main__':
                                 else:
                                     if ZDat[i,j]>((ar0x[j])+ar0x_[j]):
                                         ZDat[i,j]=(ar0x[j])+ar0x_[j]
-                    anI=anI
-                    P=np.zeros(3,float)
-                    for i in range(anI):
-                        dd=ZDat[i][lnn-NNew:].copy()                         
-                        x=ar0x[lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))].copy()
-                        ZDat[i][lnn-NNew:]=filterFourierQ(ZDat[i],(ar0x),NNew,1)[lnn-NNew:]
-                        P[0:2]=np.polyfit(x,ZDat[i][lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))],1)
-                        if not P[0]>0:
-                            P[0:2]=np.polyfit(dd,ZDat[i][lnn-NNew:],1)
-                        ZDat[i][lnn-NNew:]=(ZDat[i][lnn-NNew:]-P[1])/P[0]   
+                    # anI=anI
+                    # P=np.zeros(3,float)
+                    # for i in range(anI):
+                    #     dd=ZDat[i][lnn-NNew:].copy()                         
+                    #     x=ar0x[lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))].copy()
+                    #     ZDat[i][lnn-NNew:]=filterFourierQ(ZDat[i],(ar0x),NNew,1)[lnn-NNew:]
+                    #     P[0:2]=np.polyfit(x,ZDat[i][lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))],1)
+                    #     if not P[0]>0:
+                    #         P[0:2]=np.polyfit(dd,ZDat[i][lnn-NNew:],1)
+                    #     ZDat[i][lnn-NNew:]=(ZDat[i][lnn-NNew:]-P[1])/P[0]   
                         
                 if Lo:
                     ar0x=np.exp(ar0x) 
@@ -579,19 +579,19 @@ if __name__ == '__main__':
                                     ZDat[i]=(np.log(ZDat[i])+KPP*np.log(arr_rezBzz))/(1+KPP)
                                 else:
                                     ZDat[i]=(ZDat[i]+KPP*arr_rezBzz)/(1+KPP)
-                        P=np.zeros(3,float)
-                        for i in range(anI):
-                            dd=ZDat[i][Nf-NNew:].copy()                         
-                            if Lo:
-                                x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
-                            else:
-                                x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
-                            P[0:2]=np.polyfit(x,ZDat[i][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))],1)
-                            if not P[0]>0:
-                                P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
-                            ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0]     
+                        # P=np.zeros(3,float)
+                        # for i in range(anI):
+                        #     dd=ZDat[i][Nf-NNew:].copy()                         
+                        #     if Lo:
+                        #         x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
+                        #         ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
+                        #     else:
+                        #         x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+                        #         ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
+                        #     P[0:2]=np.polyfit(x,ZDat[i][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))],1)
+                        #     if not P[0]>0:
+                        #         P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
+                        #     ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0]     
                         
                         if anI<aNN: 
                             all_RezM[iGr][hhh]=np.amax(ZDat,axis=0)
@@ -666,7 +666,7 @@ if __name__ == '__main__':
                                         
                                         if len(dd1)>1 and len(dd1[0])>=len(dd1):
                                             eeA=-(XFilter.RALF1FilterX( seqA_*((DD__A))-dd1,len(dd1),len(dd1[0]),1,0))#+seqA_*((DD__A))
-                                            eeB=-(XFilter.RALF1FilterX(-seqA_*((DD__B))-dd1,len(dd1),len(dd1[0]),1,0))-seqA_*((DD__B))
+                                            eeB=-(XFilter.RALF1FilterX(-seqA_*((DD__B))-dd1,len(dd1),len(dd1[0]),1,0))#-seqA_*((DD__B))
                                             dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeB>0)*((eeA+eeB)>0)
                                             dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeA<0)*((eeA+eeB)<0)
                                       

@@ -328,8 +328,8 @@ def RALF1Calculation(arr_bx,arr_c,Nf,NNew,NNew0,NChan,Nhh,iProc,Nproc):
                             seqA=np.asarray(list(filter(lambda x: abs(x)!= np.Inf, seqA)),float) 
                             seqA=np.asarray(list(filter(lambda x: abs(np.isnan(x))!= 1, seqA)),float)
 
-                            dQ4_A= np.asarray( -XFilter.RALF1FilterX( seqA_*((mDD4_A))-(dQ4),len(dQ4),len(dQ4[0]),1,0),np.float16)
-                            dQ4_B= np.asarray( -XFilter.RALF1FilterX(-seqA_*((mDD4_A))-(dQ4),len(dQ4),len(dQ4[0]),1,0),np.float16)
+                            dQ4_B= np.asarray( -XFilter.RALF1FilterX( seqA_*((mDD4_A))-(dQ4),len(dQ4),len(dQ4[0]),1,0),np.float16)
+                            dQ4_A= np.asarray( -XFilter.RALF1FilterX(-seqA_*((mDD4_A))-(dQ4),len(dQ4),len(dQ4[0]),1,0),np.float16)
                          
                             #dQ4=dQ4_B*(dQ4_B>0)*((dQ4_A+dQ4_B)>0)+dQ4_A*(dQ4_A<0)*((dQ4_A+dQ4_B)<0)#                      
                             # dQ4=(dQ4_A+dQ4_B)/2

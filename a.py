@@ -28,16 +28,16 @@ try:
                     else:
                         if ZDat[i,j]>((ar0x[j])+ar0x_[j]):
                             ZDat[i,j]=(ar0x[j])+ar0x_[j]
-        anI=anI
-        P=np.zeros(3,float)
-        for i in range(anI):
-            dd=ZDat[i][lnn-NNew:].copy()                         
-            x=ar0x[lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))].copy()
-            ZDat[i][lnn-NNew:]=filterFourierQ(ZDat[i],(ar0x),NNew,1)[lnn-NNew:]
-            P[0:2]=np.polyfit(x,ZDat[i][lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))],1)
-            if not P[0]>0:
-                P[0:2]=np.polyfit(dd,ZDat[i][lnn-NNew:],1)
-            ZDat[i][lnn-NNew:]=(ZDat[i][lnn-NNew:]-P[1])/P[0]                      
+        # anI=anI
+        # P=np.zeros(3,float)
+        # for i in range(anI):
+        #     dd=ZDat[i][lnn-NNew:].copy()                         
+        #     x=ar0x[lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))].copy()
+        #     ZDat[i][lnn-NNew:]=filterFourierQ(ZDat[i],(ar0x),NNew,1)[lnn-NNew:]
+        #     P[0:2]=np.polyfit(x,ZDat[i][lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))],1)
+        #     if not P[0]>0:
+        #         P[0:2]=np.polyfit(dd,ZDat[i][lnn-NNew:],1)
+        #     ZDat[i][lnn-NNew:]=(ZDat[i][lnn-NNew:]-P[1])/P[0]                      
     bbbbb=ZDat[:,:].transpose().copy()
     aaaaa=np.median(bbbbb.transpose(),axis=0)
     %varexp --plot bbbbb 
@@ -50,8 +50,8 @@ dNIt=8
 Ngroup=3
 Lo=1
 Nproc=3*Ngroup#*(os.cpu_count())
-wrkdir = r"C:/Work/WX16/"
-[hhhao,Arr_AAA]=(hkl.load(wrkdir + "LRC-USD"+".rlf1"))
+wrkdir = r"C:/Work/WX17/"
+[hhhao,Arr_AAA]=(hkl.load(wrkdir + "SHIB-USD"+".rlf1"))
 NIter=100
 
 for hhhai in range(hhhao):  
@@ -67,7 +67,7 @@ for hhhai in range(hhhao):
     anI=len(ZDat)
     for ii in range(3):       
         ar0x=np.median(ZDat,axis=0)
-        ar0x_=.4*(np.median(abs((ZDat)-(ar0x)),axis=0))
+        ar0x_=.94*(np.median(abs((ZDat)-(ar0x)),axis=0))
             
         lnn=len(ZDat[0])
         NNew=int(.35*lnn)
@@ -79,16 +79,16 @@ for hhhai in range(hhhao):
                     else:
                         if ZDat[i,j]>((ar0x[j])+ar0x_[j]):
                             ZDat[i,j]=(ar0x[j])+ar0x_[j]
-        anI=anI
-        P=np.zeros(3,float)
-        for i in range(anI):
-            dd=ZDat[i][lnn-NNew:].copy()                         
-            x=ar0x[lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))].copy()
-            ZDat[i][lnn-NNew:]=filterFourierQ(ZDat[i],(ar0x),NNew,1)[lnn-NNew:]
-            P[0:2]=np.polyfit(x,ZDat[i][lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))],1)
-            if not P[0]>0:
-                P[0:2]=np.polyfit(dd,ZDat[i][lnn-NNew:],1)
-            ZDat[i][lnn-NNew:]=(ZDat[i][lnn-NNew:]-P[1])/P[0]                      
+        # anI=anI
+        # P=np.zeros(3,float)
+        # for i in range(anI):
+        #     dd=ZDat[i][lnn-NNew:].copy()                         
+        #     x=ar0x[lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))].copy()
+        #     ZDat[i][lnn-NNew:]=filterFourierQ(ZDat[i],(ar0x),NNew,1)[lnn-NNew:]
+        #     P[0:2]=np.polyfit(x,ZDat[i][lnn-NNew:lnn-NNew+int(lSrez*(NNew-(lnn-len(ar0x))))],1)
+        #     if not P[0]>0:
+        #         P[0:2]=np.polyfit(dd,ZDat[i][lnn-NNew:],1)
+        #     ZDat[i][lnn-NNew:]=(ZDat[i][lnn-NNew:]-P[1])/P[0]                      
     #ZDat=Arr_AAA[iGr*NIter*int(Nproc/Ngroup)+max(0,(hhh+1)-dNIt)*int(Nproc/Ngroup):iGr*NIter*int(Nproc/Ngroup)+(hhh+1)*int(Nproc/Ngroup)].copy()
     bbbbb=ZDat[:,:].transpose().copy()
     aaaaa=np.median(bbbbb.transpose(),axis=0)
