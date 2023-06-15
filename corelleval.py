@@ -146,7 +146,7 @@ except:
     WhO=[
          "SHIB-USD",
          "SOL-USD",
-    #"BTC-USD", 
+    "BTC-USD", 
     "ETH-USD", 
   "ADA-USD", 
 "SOL-USD", 
@@ -612,19 +612,19 @@ if __name__ == '__main__':
                                     ZDat[i]=(np.log(ZDat[i])+KPP*np.log(arr_rezBzz))/(1+KPP)
                                 else:
                                     ZDat[i]=(ZDat[i]+KPP*arr_rezBzz)/(1+KPP)
-                        # P=np.zeros(3,float)
-                        # for i in range(anI):
-                        #     dd=ZDat[i][Nf-NNew:].copy()                         
-                        #     if Lo:
-                        #         x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
-                        #         ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
-                        #     else:
-                        #         x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
-                        #         ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
-                        #     P[0:2]=np.polyfit(x,ZDat[i][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))],1)
-                        #     if not P[0]>0:
-                        #         P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
-                        #     ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0]     
+                        P=np.zeros(3,float)
+                        for i in range(anI):
+                            dd=ZDat[i][Nf-NNew:].copy()                         
+                            if Lo:
+                                x=np.log(ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))])
+                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],np.log(ar0_),NNew,1)[Nf-NNew:]
+                            else:
+                                x=ar0_[Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))].copy()
+                                ZDat[i][Nf-NNew:]=filterFourierQ(ZDat[i],(ar0_),NNew,1)[Nf-NNew:]
+                            P[0:2]=np.polyfit(x,ZDat[i][Nf-NNew:Nf-NNew+int(lSrez*(NNew-(Nf-len(ar0))))],1)
+                            if not P[0]>0:
+                                P[0:2]=np.polyfit(dd,ZDat[i][Nf-NNew:],1)
+                            ZDat[i][Nf-NNew:]=(ZDat[i][Nf-NNew:]-P[1])/P[0]     
                         
                         if anI<aNN: 
                             all_RezM[iGr][hhh]=np.amax(ZDat,axis=0)
@@ -698,10 +698,10 @@ if __name__ == '__main__':
                                         DD__B=DD__B*(DD__B>0)
                                         
                                         if len(dd1)>1 and len(dd1[0])>=len(dd1):
-                                            eeA=-(XFilter.RALF1FilterX( seqA_*((DD__A))-dd1,len(dd1),len(dd1[0]),1,0))#+seqA_*((DD__A))
-                                            eeB=-(XFilter.RALF1FilterX(-seqA_*((DD__B))-dd1,len(dd1),len(dd1[0]),1,0))#-seqA_*((DD__B))
-                                            dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeB>0)*((eeA+eeB)>0)
-                                            dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeA<0)*((eeA+eeB)<0)
+                                            eeB=-(XFilter.RALF1FilterX( seqA_*((DD__A))-dd1,len(dd1),len(dd1[0]),1,0))#+seqA_*((DD__A))
+                                            eeA=-(XFilter.RALF1FilterX(-seqA_*((DD__B))-dd1,len(dd1),len(dd1[0]),1,0))#-seqA_*((DD__B))
+                                            dd_AA[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeA.copy()#*(eeB>0)*((eeA+eeB)>0)
+                                            dd_BB[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]=eeB.copy()#*(eeA<0)*((eeA+eeB)<0)
                                       
                                         dd2_1=(dd_AA)[int(ii*anI/aNN):int((ii+1)*anI/aNN),int(jj*Nf/aMM):int((jj+1)*Nf/aMM)]
                                         seqB=(dd2_1.reshape(len(dd2_1)*len(dd2_1[0])))[1:]*np.ceil(0.5*(1/(mdd4_.reshape(len(dd2_1)*len(dd2_1[0]))==1)[0:len(dd2_1)*len(dd2_1[0])-1]+1/(mdd4_.reshape(len(dd2_1)*len(dd2_1[0]))==1)[1:]))
